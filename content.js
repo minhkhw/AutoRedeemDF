@@ -42,6 +42,7 @@
         <div class="ng-log-title">${ICONS.terminal}<span>Nhật ký hoạt động</span><button id="ng-clear-log-btn" class="ng-mini-btn" title="Xoá nhật ký">${ICONS.trash}</button></div>
         <div id="ng-log-box"></div>
       </div>
+      <div id="ng-credit">Được phát triển với ❤ bởi <b>Minh Khương</b></div>
     </div>
   `;
   
@@ -93,6 +94,8 @@
     #ng-log-container { display: flex; flex-direction: column; flex: 1; }
     .ng-log-title { font-size: 12px; color: #888; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
     #ng-log-box { background: #000; border: 1px solid #222; padding: 8px; height: 200px; overflow-y: auto; font-family: monospace; font-size: 12px; border-radius: 4px; }
+    #ng-credit { text-align: center; font-size: 10px; color: #4a5f75; letter-spacing: 0.3px; }
+    #ng-credit b { color: #00d6b0; font-weight: normal; }
     .log-line { margin-bottom: 2px; word-wrap: break-word; white-space: pre-wrap; }
     .log-time { color: #55697d; margin-right: 4px; font-size: 11px; }
     .log-ok { color: #00e676; }

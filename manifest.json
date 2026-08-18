@@ -3,6 +3,7 @@
   "name": "Delta Force Auto Redeem",
   "version": "1.1",
   "description": "Giao diện tự động đổi code Delta Force",
+  "author": "Minh Khương",
   "host_permissions": ["https://raw.githubusercontent.com/*", "https://nopaste.net/*"],
   "background": {
     "service_worker": "background.js"
