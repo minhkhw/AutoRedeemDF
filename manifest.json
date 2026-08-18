@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "Delta Force Auto Redeem",
+  "version": "1.1",
+  "description": "Giao diện tự động đổi code Delta Force",
+  "host_permissions": ["https://raw.githubusercontent.com/*", "https://nopaste.net/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "Delta Force Auto Redeem",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.garena.sg/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle",
+      "world": "MAIN"
+    },
+    {
+      "matches": ["*://*.garena.sg/*"],
+      "js": ["proxy.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 300px; background: #0f1923; color: #fff; font-family: Arial, sans-serif; font-size: 13px; }
+  .hdr { background: #00ffc8; color: #001b16; padding: 10px 14px; font-weight: bold; display: flex; align-items: center; gap: 8px; letter-spacing: 0.5px; }
+  .hdr svg { flex: none; }
+  .bd { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  p { line-height: 1.5; color: #c8d6e5; }
+  p b { color: #fff; }
+  .match { font-size: 12px; color: #8fa8bf; background: #1a2634; border: 1px solid #334455; border-radius: 4px; padding: 6px 10px; }
+  .src { border: 1px solid #334455; border-left: 3px solid #00ffc8; background: #1a2634; border-radius: 4px; padding: 8px 10px; }
+  .src-title { font-size: 11px; font-weight: bold; color: #00ffc8; letter-spacing: 0.5px; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; }
+  .src-title .reload-btn { background: none; border: none; color: #00ffc8; cursor: pointer; padding: 2px 4px; border-radius: 3px; line-height: 1; opacity: 0.6; transition: 0.2s; }
+  .src-title .reload-btn:hover { opacity: 1; background: rgba(0,255,200,0.12); }
+  .src-title .reload-btn.spinning svg { animation: spin 0.6s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .src-row { display: flex; gap: 8px; font-size: 12px; line-height: 1.5; margin-bottom: 2px; }
+  .src-label { color: #8fa8bf; min-width: 56px; flex: none; }
+  .src-val { color: #e6f1ff; word-break: break-word; }
+  .retry { margin-top: 6px; width: 100%; background: transparent; border: 1px dashed #ffc400; color: #ffc400; font-size: 11px; font-weight: bold; padding: 5px; border-radius: 3px; cursor: pointer; }
+  .retry:hover { background: rgba(255,196,0,0.1); }
+  ul { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+  li { color: #8fa8bf; font-size: 12px; padding-left: 14px; position: relative; }
+  li::before { content: "▸"; position: absolute; left: 0; color: #00ffc8; }
+  li b { color: #c8d6e5; }
+  .btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: #18ffc0; color: #001b16; border: none; padding: 10px; border-radius: 4px; font-weight: bold; cursor: pointer; text-decoration: none; transition: 0.2s; }
+  .btn:hover { background: #00e6ad; }
+  .btn-row { display: flex; gap: 8px; }
+  .btn-row .btn { flex: 1; font-size: 12px; padding: 9px 6px; }
+  .btn-sec { background: transparent; color: #00ffc8; border: 1px solid #00ffc8; }
+  .btn-sec:hover { background: rgba(0,255,200,0.1); }
+</style>
+</head>
+<body>
+  <div class="hdr">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="miter"><path d="M12 3.5 20.5 20h-17Z"/><path d="M12 12.5V16M10.25 14.25h3.5" stroke-linecap="round"/></svg>
+    DELTA FORCE AUTO REDEEM
+  </div>
+  <div class="bd">
+    <p>Extension chạy trực tiếp trên <b>trang đổi code của Garena</b> — panel điều khiển sẽ tự động xuất hiện ở góc phải dưới màn hình.</p>
+    <div class="match">Hoạt động trên: *.garena.sg </div>
+    <ul>
+      <li>Dán danh sách code rồi bấm <b>BẮT ĐẦU ĐỔI CODE</b></li>
+      <li>⚙ Cài đặt tốc độ kèm preset AN TOÀN / CÂN BẰNG / THẦN TỐC</li>
+      <li><b>TỔNG KẾT</b> xem bảng kết quả sau khi chạy xong</li>
+    </ul>
+    <div id="ng-source-info" class="src">
+      <div class="src-title">NGUỒN CODE MỚI NHẤT<button id="ng-src-reload" class="reload-btn" title="Tải lại"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></button></div>
+      <div class="src-row"><span class="src-label">Cập nhật</span><span class="src-val" id="ng-src-updated">…</span></div>
+      <div class="src-row"><span class="src-label">Ghi chú</span><span class="src-val" id="ng-src-note">…</span></div>
+      <button id="ng-src-retry" class="retry" style="display:none">⚠ KHÔNG TẢI ĐƯỢC — THỬ LẠI</button>
+    </div>
+    <div class="btn-row">
+      <a class="btn" href="https://redeem.df.garena.sg/" target="_blank" rel="noopener noreferrer">WEB ĐỔI CODE →</a>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
