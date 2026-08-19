@@ -42,7 +42,7 @@
         <div class="ng-log-title">${ICONS.terminal}<span>Nhật ký hoạt động</span><button id="ng-clear-log-btn" class="ng-mini-btn" title="Xoá nhật ký">${ICONS.trash}</button></div>
         <div id="ng-log-box"></div>
       </div>
-      <div id="ng-credit">Được phát triển với ❤ bởi <b>Minh Khương</b></div>
+      <div id="ng-credit">Được phát triển bởi <b>Minh Khương</b> ❤</div>
     </div>
   `;
   
