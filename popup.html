@@ -4,62 +4,215 @@
 <meta charset="UTF-8">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { width: 300px; background: #0f1923; color: #fff; font-family: Arial, sans-serif; font-size: 13px; }
-  .hdr { background: #00ffc8; color: #001b16; padding: 10px 14px; font-weight: bold; display: flex; align-items: center; gap: 8px; letter-spacing: 0.5px; }
-  .hdr svg { flex: none; }
-  .bd { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
-  p { line-height: 1.5; color: #c8d6e5; }
-  p b { color: #fff; }
-  .match { font-size: 12px; color: #8fa8bf; background: #1a2634; border: 1px solid #334455; border-radius: 4px; padding: 6px 10px; }
-  .src { border: 1px solid #334455; border-left: 3px solid #00ffc8; background: #1a2634; border-radius: 4px; padding: 8px 10px; }
-  .src-title { font-size: 11px; font-weight: bold; color: #00ffc8; letter-spacing: 0.5px; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; }
-  .src-title .reload-btn { background: none; border: none; color: #00ffc8; cursor: pointer; padding: 2px 4px; border-radius: 3px; line-height: 1; opacity: 0.6; transition: 0.2s; }
-  .src-title .reload-btn:hover { opacity: 1; background: rgba(0,255,200,0.12); }
-  .src-title .reload-btn.spinning svg { animation: spin 0.6s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .src-row { display: flex; gap: 8px; font-size: 12px; line-height: 1.5; margin-bottom: 2px; }
-  .src-label { color: #8fa8bf; min-width: 56px; flex: none; }
+  body {
+    width: 320px;
+    padding: 10px 10px 4px;
+    background: #0c1420;
+    background-image:
+      radial-gradient(130px 90px at 88% -12%, rgba(0, 255, 200, 0.09), transparent 60%),
+      radial-gradient(150px 110px at -12% 112%, rgba(0, 150, 255, 0.07), transparent 60%);
+    color: #fff;
+    font-family: Tahoma, "Segoe UI", Arial, sans-serif;
+    font-size: 13px;
+  }
+
+  /* ===== Header ===== */
+  .hdr {
+    display: flex; align-items: center; gap: 10px;
+    padding: 11px 12px;
+    background: linear-gradient(135deg, #00e8bd, #00c4a1 55%, #00a4d2);
+    border-radius: 14px;
+    box-shadow: 0 6px 18px -6px rgba(0, 220, 180, 0.45);
+    animation: fadeUp 0.35s ease both;
+  }
+  .logo {
+    width: 34px; height: 34px; flex: none;
+    border-radius: 10px;
+    background: rgba(0, 22, 18, 0.22);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ttl { display: flex; flex-direction: column; line-height: 1.18; min-width: 0; }
+  .ttl-sub { font-size: 9px; font-weight: 700; letter-spacing: 2.2px; color: rgba(0, 44, 36, 0.72); }
+  .ttl-main { font-size: 15px; font-weight: 800; letter-spacing: 0.8px; color: #01241d; white-space: nowrap; }
+  .badge {
+    margin-left: auto; flex: none;
+    display: flex; align-items: center; gap: 5px;
+    font-size: 9px; font-weight: 800; letter-spacing: 0.4px;
+    padding: 4px 9px; border-radius: 99px;
+    background: rgba(2, 28, 23, 0.32); color: #f2fffc;
+  }
+  .badge .dot { width: 6px; height: 6px; border-radius: 50%; flex: none; }
+  .badge.ready .dot { background: #54ffd5; animation: pulseG 1.5s infinite; }
+  .badge.not-ready .dot { background: #ff8a94; animation: pulseR 1.5s infinite; }
+
+  /* ===== Body ===== */
+  .bd { padding: 12px 2px 4px; display: flex; flex-direction: column; gap: 9px; }
+  .intro { line-height: 1.5; color: #b9c9da; font-size: 12.5px; animation: fadeUp 0.35s 0.04s ease both; }
+  .intro b { color: #fff; }
+
+  /* 3 bước có số */
+  .steps { display: flex; flex-direction: column; gap: 6px; animation: fadeUp 0.35s 0.08s ease both; }
+  .step {
+    display: flex; gap: 9px; align-items: flex-start;
+    background: #131f2e; border: 1px solid #24374b; border-radius: 11px;
+    padding: 8px 10px; transition: 0.2s;
+  }
+  .step:hover { border-color: rgba(0, 212, 170, 0.45); transform: translateX(2px); }
+  .num {
+    flex: none; width: 20px; height: 20px; margin-top: 1px;
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800;
+    background: linear-gradient(135deg, #00e8bd, #00b3d1); color: #01241d;
+  }
+  .step-txt { font-size: 12px; color: #9fb3c8; line-height: 1.45; }
+  .step-txt b { color: #e9f4ff; }
+
+  .match {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11.5px; color: #8fa8bf;
+    border: 1px dashed #2c4156; border-radius: 9px;
+    padding: 6px 10px;
+    animation: fadeUp 0.35s 0.12s ease both;
+  }
+  .match svg { flex: none; opacity: 0.7; }
+  .match b { color: #00ffc8; }
+
+  /* Khối nguồn code */
+  .src {
+    position: relative; overflow: hidden;
+    background: linear-gradient(180deg, #14212f, #111c29);
+    border: 1px solid #273b4f; border-radius: 12px;
+    padding: 10px 11px;
+    animation: fadeUp 0.35s 0.16s ease both;
+    transition: 0.2s;
+  }
+  .src:hover { border-color: rgba(0, 255, 200, 0.35); }
+  .src::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: linear-gradient(180deg, #00ffc8, #00a8ff);
+  }
+  .src-title {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 10.5px; font-weight: 800; color: #00ffc8; letter-spacing: 1px;
+    margin-bottom: 7px;
+  }
+  .live-chip {
+    margin-left: auto;
+    display: flex; align-items: center; gap: 4px;
+    font-size: 8.5px; font-weight: 800; letter-spacing: 0.8px;
+    color: #3dffb8;
+    background: rgba(0, 255, 200, 0.1);
+    border: 1px solid rgba(0, 255, 200, 0.28);
+    padding: 2px 7px; border-radius: 99px;
+  }
+  .live-chip::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: #3dffb8; animation: pulseG 1.5s infinite; }
+  .reload-btn {
+    background: none; border: none; color: #00ffc8; cursor: pointer;
+    padding: 3px; border-radius: 7px; line-height: 0; opacity: 0.65; transition: 0.2s;
+  }
+  .reload-btn:hover { opacity: 1; background: rgba(0, 255, 200, 0.14); }
+  .reload-btn.spinning svg { animation: spin 0.6s linear infinite; }
+  .src-row { display: flex; gap: 8px; font-size: 12px; line-height: 1.5; margin-bottom: 3px; align-items: baseline; }
+  .src-row:last-of-type { margin-bottom: 0; }
+  .src-label { display: inline-flex; align-items: center; gap: 5px; color: #7d95ac; min-width: 84px; flex: none; font-size: 11.5px; }
+  .src-label svg { flex: none; opacity: 0.75; }
   .src-val { color: #e6f1ff; word-break: break-word; }
-  .retry { margin-top: 6px; width: 100%; background: transparent; border: 1px dashed #ffc400; color: #ffc400; font-size: 11px; font-weight: bold; padding: 5px; border-radius: 3px; cursor: pointer; }
-  .retry:hover { background: rgba(255,196,0,0.1); }
-  ul { list-style: none; display: flex; flex-direction: column; gap: 5px; }
-  li { color: #8fa8bf; font-size: 12px; padding-left: 14px; position: relative; }
-  li::before { content: "▸"; position: absolute; left: 0; color: #00ffc8; }
-  li b { color: #c8d6e5; }
-  .btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: #18ffc0; color: #001b16; border: none; padding: 10px; border-radius: 4px; font-weight: bold; cursor: pointer; text-decoration: none; transition: 0.2s; }
-  .btn:hover { background: #00e6ad; }
-  .btn-row { display: flex; gap: 8px; }
-  .btn-row .btn { flex: 1; font-size: 12px; padding: 9px 6px; }
-  .btn-sec { background: transparent; color: #00ffc8; border: 1px solid #00ffc8; }
-  .btn-sec:hover { background: rgba(0,255,200,0.1); }
-  .ft { text-align: center; font-size: 11px; color: #5c7389; padding: 0 14px 12px; }
+  .src-val .rel { color: #5f7a92; font-size: 11px; margin-left: 4px; }
+  .retry {
+    margin-top: 7px; width: 100%;
+    background: rgba(255, 196, 0, 0.06);
+    border: 1px dashed rgba(255, 196, 0, 0.55);
+    color: #ffc400; font-size: 11px; font-weight: 700;
+    padding: 6px; border-radius: 8px; cursor: pointer; transition: 0.2s;
+  }
+  .retry:hover { background: rgba(255, 196, 0, 0.14); }
+
+  /* Nút chính */
+  .cta {
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 11px; border-radius: 12px;
+    font-size: 13px; font-weight: 800; letter-spacing: 0.4px;
+    color: #01241d; text-decoration: none;
+    background: linear-gradient(135deg, #19ffbf, #00c8e8);
+    box-shadow: 0 6px 16px -6px rgba(0, 230, 190, 0.5);
+    transition: 0.2s;
+    animation: fadeUp 0.35s 0.2s ease both;
+  }
+  .cta:hover { transform: translateY(-1px); box-shadow: 0 9px 22px -6px rgba(0, 230, 190, 0.6); filter: brightness(1.06); }
+  .cta svg { transition: transform 0.2s; }
+  .cta:hover svg { transform: translateX(3px); }
+  .cta::after {
+    content: ""; position: absolute; top: 0; left: -60%;
+    width: 40%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    transform: skewX(-20deg);
+    animation: shine 3.2s infinite;
+  }
+
+  .ft { text-align: center; font-size: 10.5px; color: #5c7389; padding: 9px 0 7px; animation: fadeUp 0.35s 0.24s ease both; }
   .ft b { color: #00ffc8; }
+  .heart { color: #ff5f70; display: inline-block; animation: beat 1.4s infinite; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes shine { 0% { left: -60%; } 55%, 100% { left: 135%; } }
+  @keyframes beat { 0%, 40%, 80%, 100% { transform: scale(1); } 20%, 60% { transform: scale(1.25); } }
+  @keyframes pulseG { 0% { box-shadow: 0 0 0 0 rgba(84, 255, 213, 0.55); } 70% { box-shadow: 0 0 0 5px rgba(84, 255, 213, 0); } 100% { box-shadow: 0 0 0 0 rgba(84, 255, 213, 0); } }
+  @keyframes pulseR { 0% { box-shadow: 0 0 0 0 rgba(255, 138, 148, 0.55); } 70% { box-shadow: 0 0 0 5px rgba(255, 138, 148, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 138, 148, 0); } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 </style>
 </head>
 <body>
   <div class="hdr">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="miter"><path d="M12 3.5 20.5 20h-17Z"/><path d="M12 12.5V16M10.25 14.25h3.5" stroke-linecap="round"/></svg>
-    DELTA FORCE AUTO REDEEM
+    <div class="logo">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#01241d" stroke-width="2" stroke-linejoin="miter"><path d="M12 3.5 20.5 20h-17Z"/><path d="M12 12.5V16M10.25 14.25h3.5" stroke-linecap="round"/></svg>
+    </div>
+    <div class="ttl">
+      <span class="ttl-sub">DELTA FORCE</span>
+      <span class="ttl-main">AUTO REDEEM</span>
+    </div>
+    <span id="status-badge" class="badge not-ready" title="Không ở trang *.garena.sg — hãy mở web đổi code của Garena"><i class="dot"></i><span id="status-text">CHƯA SẴN SÀNG</span></span>
   </div>
+
   <div class="bd">
-    <p>Extension chạy trực tiếp trên <b>trang đổi code của Garena</b> — panel điều khiển sẽ tự động xuất hiện ở góc phải dưới màn hình.</p>
-    <div class="match">Hoạt động trên: *.garena.sg </div>
-    <ul>
-      <li>Dán danh sách code rồi bấm <b>BẮT ĐẦU ĐỔI CODE</b></li>
-      <li>⚙ Cài đặt tốc độ kèm preset AN TOÀN / CÂN BẰNG / THẦN TỐC</li>
-      <li><b>TỔNG KẾT</b> xem bảng kết quả sau khi chạy xong</li>
-    </ul>
+    <p class="intro">Extension chạy trực tiếp trên <b>trang đổi code của Garena</b> — panel điều khiển tự xuất hiện ở góc phải dưới màn hình.</p>
+
+    <div class="steps">
+      <div class="step"><span class="num">1</span><div class="step-txt"><b>Mở web đổi code</b> — panel tự hiện ở góc phải dưới</div></div>
+      <div class="step"><span class="num">2</span><div class="step-txt"><b>Dán danh sách code</b> & chọn tốc độ: AN TOÀN / CÂN BẰNG / THẦN TỐC</div></div>
+      <div class="step"><span class="num">3</span><div class="step-txt"><b>Bấm BẮT ĐẦU ĐỔI CODE</b> — xem <b>TỔNG KẾT</b> khi chạy xong</div></div>
+    </div>
+
+    <div class="match">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      Chỉ kích hoạt trên <b>*.garena.sg</b>
+    </div>
+
     <div id="ng-source-info" class="src">
-      <div class="src-title">NGUỒN CODE MỚI NHẤT<button id="ng-src-reload" class="reload-btn" title="Tải lại"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></button></div>
-      <div class="src-row"><span class="src-label">Cập nhật</span><span class="src-val" id="ng-src-updated">…</span></div>
-      <div class="src-row"><span class="src-label">Ghi chú</span><span class="src-val" id="ng-src-note">…</span></div>
+      <div class="src-title">NGUỒN CODE MỚI NHẤT
+        <span id="live-chip" class="live-chip" hidden>LIVE</span>
+        <button id="ng-src-reload" class="reload-btn" title="Tải lại"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></button>
+      </div>
+      <div class="src-row">
+        <span class="src-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="4"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Cập nhật</span>
+        <span class="src-val"><span id="ng-src-updated">…</span><span class="rel" id="ng-src-rel"></span></span>
+      </div>
+      <div class="src-row">
+        <span class="src-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Ghi chú</span>
+        <span class="src-val" id="ng-src-note">…</span>
+      </div>
       <button id="ng-src-retry" class="retry" style="display:none">⚠ KHÔNG TẢI ĐƯỢC — THỬ LẠI</button>
     </div>
-    <div class="btn-row">
-      <a class="btn" href="https://redeem.df.garena.sg/" target="_blank" rel="noopener noreferrer">WEB ĐỔI CODE →</a>
-    </div>
+
+    <a class="cta" href="https://redeem.df.garena.sg/" target="_blank" rel="noopener noreferrer">
+      MỞ WEB ĐỔI CODE
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
   </div>
-  <div class="ft">Được phát triển bởi <b>Minh Khương</b> ❤</div>
+
+  <div class="ft">Được phát triển bởi <b>Minh Khương</b> <span class="heart">❤</span></div>
   <script src="popup.js"></script>
 </body>
 </html>

@@ -1,3 +1,30 @@
+// Badge trạng thái: kiểm tra tab hiện tại có phải trang đổi code không
+const setStatus = (ok) => {
+  const badge = document.getElementById("status-badge");
+  const text = document.getElementById("status-text");
+  if (!badge || !text) return;
+  if (ok) {
+    text.textContent = "SẴN SÀNG";
+    badge.classList.remove("not-ready");
+    badge.classList.add("ready");
+    badge.title = "Đang ở trang *.garena.sg — extension sẵn sàng";
+  } else {
+    text.textContent = "CHƯA SẴN SÀNG";
+    badge.classList.remove("ready");
+    badge.classList.add("not-ready");
+    badge.title = "Không ở trang *.garena.sg — hãy mở web đổi code của Garena";
+  }
+};
+
+if (typeof chrome !== "undefined" && chrome.tabs && chrome.tabs.query) {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    const url = (tabs[0] && tabs[0].url) || "";
+    setStatus(/^https?:\/\/([\w-]+\.)*garena\.sg(\/|$)/i.test(url));
+  });
+} else {
+  setStatus(false); // chạy thử popup ngoài môi trường extension
+}
+
 // Khối NGUỒN CODE MỚI NHẤT: tải file JSON trên GitHub
 // Mỗi lần mở popup đều tải mới; có timeout chống treo
 
@@ -44,20 +71,39 @@ const loadSource = async () => {
   throw lastErr || new Error("Không tải được nguồn nào");
 };
 
-// Mỗi lần mở popup: tải mới và hiển thị "updated" + "note"; lỗi thì hiện nút thử lại
+const relTime = (dateStr) => {
+  const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec((dateStr || "").trim());
+  if (!m) return "";
+  const d = new Date(+m[3], +m[2] - 1, +m[1]);
+  if (isNaN(d.getTime())) return "";
+  const days = Math.floor((Date.now() - d.getTime()) / 864e5);
+  if (days <= 0) return "hôm nay";
+  if (days === 1) return "hôm qua";
+  if (days < 30) return days + " ngày trước";
+  return Math.floor(days / 30) + " tháng trước";
+};
+
 const renderInfo = async () => {
   const updatedEl = document.getElementById("ng-src-updated");
+  const relEl = document.getElementById("ng-src-rel");
   const noteEl = document.getElementById("ng-src-note");
   const retryBtn = document.getElementById("ng-src-retry");
+  const liveChip = document.getElementById("live-chip");
   retryBtn.style.display = "none";
+  liveChip.hidden = true;
   updatedEl.textContent = "…";
+  relEl.textContent = "";
   noteEl.textContent = "…";
   try {
     const { data } = await loadSource();
-    updatedEl.textContent = (typeof data.updated === "string" ? data.updated.trim() : "") || "—";
+    const updated = (typeof data.updated === "string" ? data.updated.trim() : "");
+    updatedEl.textContent = updated || "—";
+    relEl.textContent = relTime(updated);
     noteEl.textContent = (typeof data.note === "string" ? data.note.trim() : "") || "—";
+    liveChip.hidden = false;
   } catch (_) {
     updatedEl.textContent = "—";
+    relEl.textContent = "";
     noteEl.textContent = "—";
     retryBtn.style.display = "block";
   }
