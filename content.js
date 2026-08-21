@@ -7,7 +7,7 @@
     clipboard: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>`,
     cloudDL: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a6 6 0 0 0-5.8 4.6A4.5 4.5 0 0 0 5.5 15H7m10 0h1.5A4.5 4.5 0 0 0 18 6.6 6 6 0 0 0 12 2Z"/><path d="M12 18v4m0-4-3 3m3-3 3 3"/></svg>`,
     trash: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M10 11v6M14 11v6"/></svg>`,
-    radar: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4.5 15.5a9.5 9.5 0 0 1 15 0"/><path d="M8.5 15.5a4.5 4.5 0 0 1 7 0"/><path d="M12 18.5h.01"/></svg>`,
+    stopwatch: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2h5"/><path d="M12 2v3"/><circle cx="12" cy="13.5" r="7.5"/><path d="M12 9.5v4l2.5 2"/></svg>`,
     terminal: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="1.5"/><path d="m7 9.5 3 2.5-3 2.5M12.5 14.5H17"/></svg>`,
     gear: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.01a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`,
     table: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="15" rx="1.5"/><path d="M3.5 9.5h17M9.5 9.5v10"/></svg>`,
@@ -27,6 +27,11 @@
         <button id="ng-minimize" title="Thu gọn / Mở rộng">${ICONS.chevDown}</button>
       </div>
     </div>
+    <div id="ng-update-banner" style="display:none" title="Mở trang GitHub để tải bản mới">
+      <span class="ng-upd-ico">🆕</span>
+      <span>Có bản mới <b id="ng-upd-ver"></b> — bấm để tải</span>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </div>
     <div id="ng-body">
       <div class="ng-field-label">${ICONS.ticket}<span>MÃ GIFT CODE</span><button id="ng-remote-btn" class="ng-mini-btn" title="Tải code từ nguồn và dán vào ô">${ICONS.cloudDL}</button><button id="ng-paste-btn" class="ng-mini-btn" title="Dán danh sách code từ clipboard">${ICONS.clipboard}</button></div>
       <textarea id="ng-code-input" placeholder="Dán danh sách code vào đây, mỗi code một dòng..."></textarea>
@@ -36,13 +41,23 @@
         <button id="ng-retry-btn" disabled title="Chạy lại code lỗi / chưa chạy xong khi dừng">${ICONS.retry}<span id="ng-retry-text">CHẠY LẠI</span></button>
         <button id="ng-summary-btn" disabled title="Xem kết quả tổng kết">${ICONS.table}<span>TỔNG KẾT</span></button>
       </div>
-      <div id="ng-status">${ICONS.radar}<span id="ng-status-text">Sẵn sàng...</span></div>
-      <div id="ng-progress-wrap"><div id="ng-progress-bar"></div></div>
+      <div id="ng-cur-card">
+        <div class="ng-cur-row1">
+          <span class="ng-cur-ico">${ICONS.stopwatch}</span>
+          <span id="ng-cur-code">·····</span>
+          <span id="ng-cur-timer"></span>
+        </div>
+        <div id="ng-cur-sub">Sẵn sàng...</div>
+        <div id="ng-cur-cd"><div id="ng-cur-cd-fill"></div></div>
+      </div>
       <div id="ng-stats-box">
-        <span class="stats-item stats-ok">✔ 0</span>
-        <span class="stats-item stats-used">⏳ 0</span>
-        <span class="stats-item stats-fail">✘ 0</span>
-        <span class="stats-item stats-remain">⏭ 0</span>
+        <div class="ng-stat-row">
+          <div class="ng-stat ng-st-ok" data-k="ok" title="Đổi thành công"><div class="ng-stat-top"><span class="ng-stat-led"></span><span class="ng-stat-num">0</span></div><span class="ng-stat-lbl">THÀNH CÔNG</span></div>
+          <div class="ng-stat ng-st-used" data-k="used" title="Đã dùng / đạt giới hạn"><div class="ng-stat-top"><span class="ng-stat-led"></span><span class="ng-stat-num">0</span></div><span class="ng-stat-lbl">ĐÃ DÙNG</span></div>
+          <div class="ng-stat ng-st-fail" data-k="fail" title="Hết hạn / sai / lỗi quà"><div class="ng-stat-top"><span class="ng-stat-led"></span><span class="ng-stat-num">0</span></div><span class="ng-stat-lbl">LỖI</span></div>
+          <div class="ng-stat ng-st-remain" data-k="remain" title="Chưa chạy"><div class="ng-stat-top"><span class="ng-stat-led"></span><span class="ng-stat-num">0</span></div><span class="ng-stat-lbl">CÒN LẠI</span></div>
+        </div>
+        <div id="ng-stat-ratio" title="Tỉ lệ kết quả theo tổng số code"><i class="rs rs-ok"></i><i class="rs rs-used"></i><i class="rs rs-fail"></i><i class="rs rs-other"></i></div>
       </div>
       <div id="ng-log-container">
         <div class="ng-log-title">${ICONS.terminal}<span>Nhật ký hoạt động</span><button id="ng-clear-log-btn" class="ng-mini-btn" title="Xoá nhật ký">${ICONS.trash}</button></div>
@@ -89,33 +104,59 @@
     #ng-title { display: flex; align-items: center; gap: 8px; }
     #ng-title span { font-size: 15px; font-weight: 800; letter-spacing: 0.8px; }
     #ng-title svg { background: rgba(2,28,23,0.22); padding: 5px; border-radius: 9px; }
-    #ng-title svg, #ng-minimize svg, #ng-start-btn svg, #ng-retry-btn svg, #ng-summary-btn svg, #ng-settings-btn svg, #ng-status svg, .ng-field-label svg, .ng-log-title svg, #ng-sum-header svg, #ng-sum-close svg, #ng-set-header svg, #ng-set-close svg { display: block; flex: none; }
+    #ng-update-banner {
+      flex-shrink: 0;
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 12px;
+      background: linear-gradient(90deg, rgba(255,179,0,0.14), rgba(255,140,0,0.05));
+      border-bottom: 1px solid rgba(255,186,0,0.4);
+      color: #ffcf7d; font-size: 12px; font-weight: 700;
+      cursor: pointer; transition: 0.2s; letter-spacing: 0.2px;
+    }
+    #ng-update-banner:hover { background: linear-gradient(90deg, rgba(255,179,0,0.24), rgba(255,140,0,0.1)); }
+    #ng-update-banner b { color: #ffe3ad; }
+    #ng-update-banner .ng-upd-ico {
+      flex: none; width: 20px; height: 20px; border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,186,0,0.16); font-size: 11px;
+    }
+    #ng-update-banner svg { margin-left: auto; flex: none; opacity: 0.75; transition: transform 0.2s; }
+    #ng-update-banner:hover svg { transform: translateX(2px); opacity: 1; }
+    #ng-title svg, #ng-minimize svg, #ng-start-btn svg, #ng-retry-btn svg, #ng-summary-btn svg, #ng-settings-btn svg, .ng-field-label svg, .ng-log-title svg, #ng-sum-header svg, #ng-sum-close svg, #ng-set-header svg, #ng-set-close svg { display: block; flex: none; }
     #ng-header-actions { display: flex; align-items: center; gap: 4px; }
     #ng-settings-btn, #ng-minimize { background: rgba(2, 28, 23, 0.22); border: none; color: #01241d; width: 30px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; border-radius: 8px; transition: 0.2s; }
     #ng-settings-btn:hover, #ng-minimize:hover { background: rgba(2, 28, 23, 0.38); }
     #ng-stats-box {
       flex-shrink: 0;
+      background: #0a121d;
+      border: 1px solid #1d2f44;
+      border-radius: 12px;
+      padding: 7px 8px 8px;
       display: flex;
-      justify-content: center;
-      gap: 14px;
-      padding: 6px 0 8px 0;
-      font-size: 11px;
-      font-weight: bold;
-      align-items: center;
-      background: transparent;
-      margin: 0;
+      flex-direction: column;
+      gap: 7px;
     }
-    .stats-item {
-      padding: 2px 10px;
-      border-radius: 99px;
-      border: 1px solid;
-      background: rgba(255,255,255,0.02);
-    }
+    .ng-stat-row { display: grid; grid-template-columns: repeat(4, 1fr); }
+    .ng-stat { position: relative; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 3px 0 2px; border-radius: 9px; transition: background 0.2s; }
+    .ng-stat:hover { background: rgba(255,255,255,0.03); }
+    .ng-stat + .ng-stat::before { content: ""; position: absolute; left: 0; top: 18%; bottom: 18%; width: 1px; background: #1d2f44; }
+    .ng-stat-top { display: flex; align-items: center; gap: 6px; }
+    .ng-stat-led { width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 7px currentColor; }
+    .ng-stat-num { font-family: Consolas, "Courier New", monospace; font-size: 16px; font-weight: bold; line-height: 1; color: inherit; display: inline-block; }
+    .ng-stat-lbl { font-size: 9px; font-weight: bold; letter-spacing: 0.7px; color: #7d95ac; }
+    .ng-stat.ng-st-ok { color: #00e676; }
+    .ng-stat.ng-st-used { color: #ffc400; }
+    .ng-stat.ng-st-fail { color: #ff6b78; }
+    .ng-stat.ng-st-remain { color: #b388ff; }
+    .ng-stat-num.ng-stat-pop { animation: ng-stat-pop 0.45s cubic-bezier(0.2, 2.2, 0.4, 1); }
+    @keyframes ng-stat-pop { 0% { transform: scale(1); } 35% { transform: scale(1.45); } 100% { transform: scale(1); } }
+    #ng-stat-ratio { height: 4px; border-radius: 99px; background: #101b29; overflow: hidden; display: flex; }
+    #ng-stat-ratio .rs { height: 100%; width: 0%; transition: width 0.35s ease; }
+    #ng-stat-ratio .rs-ok { background: #00e676; }
+    #ng-stat-ratio .rs-used { background: #ffc400; }
+    #ng-stat-ratio .rs-fail { background: #ff6b78; }
+    #ng-stat-ratio .rs-other { background: #b388ff; }
 	.heart { color: #ff5f70; display: inline-block; animation: beat 1.4s infinite; }
-    .stats-ok { color: #00e676; border-color: rgba(0,230,118,0.55); }
-    .stats-used { color: #ffc400; border-color: rgba(255,196,0,0.55); }
-    .stats-fail { color: #ff6b78; border-color: rgba(255,82,82,0.55); }
-    .stats-remain { color: #b388ff; border-color: rgba(179,136,255,0.55); }
     #ng-body {
       flex: 1 1 auto;
       padding: 14px;
@@ -171,9 +212,26 @@
     #ng-retry-btn { background: rgba(255,196,0,0.05); color: #ffc400; border: 1px solid rgba(255,196,0,0.55); padding: 10px 12px; border-radius: 10px; font-weight: bold; font-size: 12px; letter-spacing: 0.5px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; }
     #ng-retry-btn:hover:not(:disabled) { background: rgba(255,196,0,0.13); border-color: #ffc400; }
     #ng-retry-btn:disabled { opacity: 0.35; cursor: not-allowed; }
-    #ng-status { font-size: 13px; color: #00c8ff; font-weight: bold; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 2px 0; }
-    #ng-progress-wrap { height: 6px; background: #131f2e; border: 1px solid #24374b; border-radius: 99px; overflow: hidden; margin: 2px 0 4px; }
-    #ng-progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #00ffc8, #00c8ff); border-radius: 99px; transition: width 0.25s; box-shadow: 0 0 8px rgba(0,255,200,0.55); }
+    #ng-cur-card { flex-shrink: 0; background: #0a121d; border: 1px solid #1d2f44; border-radius: 12px; padding: 9px 12px 10px; display: flex; flex-direction: column; gap: 6px; transition: border-color 0.25s, box-shadow 0.25s; }
+    #ng-cur-card.ng-cur-live { border-color: rgba(0,255,200,0.45); box-shadow: 0 0 0 1px rgba(0,255,200,0.1), 0 0 18px -6px rgba(0,255,200,0.3); }
+    .ng-cur-row1 { display: flex; align-items: center; gap: 9px; min-width: 0; }
+    .ng-cur-ico { display: flex; align-items: center; flex: none; color: #55708a; transition: color 0.25s; }
+    #ng-cur-card.ng-cur-live .ng-cur-ico { color: #00ffc8; animation: ng-cur-spin 0.9s linear infinite; }
+    @keyframes ng-cur-spin { to { transform: rotate(360deg); } }
+    #ng-cur-code { flex: 1 1 auto; min-width: 0; font-family: Consolas, "Courier New", monospace; font-size: 17px; font-weight: bold; letter-spacing: 1px; color: #6d8aa5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: color 0.2s, text-shadow 0.2s; }
+    #ng-cur-card.ng-cur-live #ng-cur-code { color: #fff; text-shadow: 0 0 12px rgba(0,255,200,0.45); }
+    #ng-cur-timer { flex: none; font-family: Consolas, "Courier New", monospace; font-size: 11.5px; font-weight: bold; color: #ffc400; background: rgba(255,196,0,0.08); border: 1px solid rgba(255,196,0,0.35); padding: 2px 8px; border-radius: 99px; }
+    #ng-cur-timer:empty { display: none; }
+    #ng-cur-timer.ng-cur-low { color: #ff6b78; background: rgba(255,82,82,0.1); border-color: rgba(255,82,82,0.55); animation: ng-cur-blink 0.5s steps(2) infinite; }
+    @keyframes ng-cur-blink { 50% { opacity: 0.55; } }
+    #ng-cur-sub { font-size: 12px; font-weight: bold; color: #8fa8bf; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #ng-cur-sub.ng-sub-run { color: #00c8ff; }
+    #ng-cur-sub.ng-sub-ok { color: #00e676; }
+    #ng-cur-sub.ng-sub-bad { color: #ff6b78; }
+    #ng-cur-sub.ng-sub-warn { color: #ffc400; }
+    #ng-cur-cd { height: 5px; border-radius: 99px; background: #101b29; border: 1px solid #1d2f44; overflow: hidden; }
+    #ng-cur-cd-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #00ffc8, #00c8ff); border-radius: 99px; transition: width 0.12s linear; }
+    #ng-cur-cd-fill.ng-cur-low { background: linear-gradient(90deg, #ffc400, #ff6b78); }
     .ng-done-glow { animation: ng-done-pulse 0.8s ease-in-out 4; }
     @keyframes ng-done-pulse { 0%, 100% { box-shadow: 0 12px 40px rgba(0,0,0,0.55); } 50% { box-shadow: 0 0 0 3px rgba(0,255,200,0.8), 0 0 26px rgba(0,255,200,0.65); } }
     #ng-log-container { display: flex; flex-direction: column; flex: 1; min-height: 0; margin-top: 2px; }
@@ -456,7 +514,34 @@
   document.addEventListener('mouseup', () => isDragging = false);
 
   const logBox = document.getElementById("ng-log-box");
-  const statusText = document.getElementById("ng-status-text");
+
+  // ===== CARD "ĐANG CHẠY" — code hiện tại + đếm ngược kiểu CD =====
+  const curCard = document.getElementById("ng-cur-card");
+  const curCodeEl = document.getElementById("ng-cur-code");
+  const curTimerEl = document.getElementById("ng-cur-timer");
+  const curSubEl = document.getElementById("ng-cur-sub");
+  const curCdFill = document.getElementById("ng-cur-cd-fill");
+  const setCurSub = (text, cls = "") => { curSubEl.textContent = text; curSubEl.className = cls; };
+  const setCurCountdown = (remainingMs, totalMs, label = "Hết hạn sau:") => {
+    const r = Math.max(0, remainingMs), t = Math.max(1, totalMs);
+    curTimerEl.textContent = `⏱ ${label} ${(r / 1000).toFixed(1)}s / ${(t / 1000).toFixed(1)}s`;
+    const low = r / t < 0.3;
+    curTimerEl.classList.toggle("ng-cur-low", low);
+    curCdFill.classList.toggle("ng-cur-low", low);
+    curCdFill.style.width = ((r / t) * 100).toFixed(1) + "%";
+  };
+  const clearCurCountdown = () => {
+    curTimerEl.textContent = "";
+    curTimerEl.classList.remove("ng-cur-low");
+    curCdFill.classList.remove("ng-cur-low");
+    curCdFill.style.width = "0%";
+  };
+  const resetCurCard = (subText = "Sẵn sàng...", cls = "") => {
+    curCard.classList.remove("ng-cur-live");
+    curCodeEl.textContent = "·····";
+    setCurSub(subText, cls);
+    clearCurCountdown();
+  };
 
   function appendLog(html, type = "") {
     const div = document.createElement("div");
@@ -525,7 +610,6 @@
   const startBtnText = document.getElementById("ng-start-text");
   const retryBtn = document.getElementById("ng-retry-btn");
   const retryBtnText = document.getElementById("ng-retry-text");
-  const progressBar = document.getElementById("ng-progress-bar");
   let isRunning = false;
   let stopRequested = false;
   let retryCodes = [];
@@ -535,6 +619,7 @@
   // ===== STATS BOX =====
   let currentResults = [];
   let totalCodesCount = 0;
+  let lastStatNums = { ok: 0, used: 0, fail: 0, remain: 0 };
 
   function updateStatsBox() {
     const box = document.getElementById("ng-stats-box");
@@ -545,12 +630,25 @@
     const failed = currentResults.filter(r => r.status === "EXPIRED" || r.status === "INVALID" || r.status === "PRESENT_ERROR").length;
     const other = currentResults.filter(r => r.status === "TEMP_ERROR" || r.status === "NO_RESPONSE" || r.status === "VERIFY" || r.status === "OTHER").length;
     const remaining = totalCodesCount - total;
-    box.innerHTML = `
-      <span class="stats-item stats-ok">✔ ${success}</span>
-      <span class="stats-item stats-used">⏳ ${used}</span>
-      <span class="stats-item stats-fail">✘ ${failed}</span>
-      <span class="stats-item stats-remain">⏭ ${remaining}</span>
-    `;
+    const nums = { ok: success, used, fail: failed, remain: remaining };
+    for (const k of Object.keys(nums)) {
+      const numEl = box.querySelector(`.ng-stat[data-k="${k}"] .ng-stat-num`);
+      if (!numEl || nums[k] === lastStatNums[k]) continue;
+      const increased = nums[k] > lastStatNums[k];
+      numEl.textContent = nums[k];
+      if (increased && nums[k] > 0) {
+        numEl.classList.remove("ng-stat-pop");
+        void numEl.offsetWidth;
+        numEl.classList.add("ng-stat-pop");
+      }
+      lastStatNums[k] = nums[k];
+    }
+    const base = Math.max(totalCodesCount, total, 1);
+    const segs = { ok: success, used, fail: failed, other };
+    for (const k of Object.keys(segs)) {
+      const seg = box.querySelector(`#ng-stat-ratio .rs-${k}`);
+      if (seg) seg.style.width = ((segs[k] / base) * 100).toFixed(2) + "%";
+    }
   }
 
   const updateRetryBtn = () => {
@@ -629,8 +727,10 @@
     startBtn.classList.add("ng-running", "ng-stop-mode");
     startBtnText.innerText = "DỪNG";
     logBox.innerHTML = "";
-    statusText.innerText = "Đang xử lý...";
-    progressBar.style.width = "0%";
+    curCard.classList.add("ng-cur-live");
+    curCodeEl.textContent = "·····";
+    setCurSub("Đang xử lý...", "ng-sub-run");
+    clearCurCountdown();
     summaryBtn.disabled = true;
     updateRetryBtn();
 
@@ -660,7 +760,8 @@
     updateRetryBtn();
     sessionStats.totalMs += Date.now() - runT0;
     if (originalPageTitle !== null) { document.title = originalPageTitle; originalPageTitle = null; }
-    statusText.innerText = outcome ? (stopped ? "Đã dừng theo yêu cầu" : "Hoàn tất!") : "Lỗi: chưa thấy ô nhập/nút Đổi!";
+    if (outcome) resetCurCard(stopped ? "⏹ Đã dừng theo yêu cầu" : "✔ Hoàn tất!", stopped ? "ng-sub-warn" : "ng-sub-ok");
+    else resetCurCard("❌ Lỗi: chưa thấy ô nhập/nút Đổi!", "ng-sub-bad");
     appendLog("=== HOÀN TẤT QUÁ TRÌNH ===", "title");
     // Cập nhật stats box lần cuối
     updateStatsBox();
@@ -853,13 +954,22 @@
         const attemptMeta = { id: ++attemptCounter, code, startedAt: start };
         activeAttempt = attemptMeta;
 
+        curCard.classList.add("ng-cur-live");
+        curCodeEl.textContent = code;
+        setCurSub(attempt > 1 ? `🔄 Thử lại lần ${attempt}...` : "⏳ Đang gửi yêu cầu...", "ng-sub-run");
+        setCurCountdown(CONFIG.timeoutMs, CONFIG.timeoutMs);
+
         let requestSent = false;
         for (let tryI = 1; tryI <= CONFIG.submitClickRetries + 1; tryI++) {
           const subBtn = tryI === 1 ? btn : findButton();
           if (!subBtn) break;
           clickRedeem(subBtn);
           const confirmStart = Date.now();
-          while (Date.now() - confirmStart < CONFIG.submitConfirmMs) { await sleep(50); if (requestStarts.some(x => x.attemptId === attemptMeta.id) || getResponseMessage(attemptMeta).text) { requestSent = true; break; } }
+          while (Date.now() - confirmStart < CONFIG.submitConfirmMs) {
+            await sleep(50);
+            if (requestStarts.some(x => x.attemptId === attemptMeta.id) || getResponseMessage(attemptMeta).text) { requestSent = true; break; }
+            setCurCountdown(CONFIG.timeoutMs - (Date.now() - start), CONFIG.timeoutMs);
+          }
           if (requestSent) break;
         }
 
@@ -869,18 +979,25 @@
           msg = getResponseMessage(attemptMeta);
           if (msg.text) break;
           if (Date.now() - start >= 500) { msg = getMessage(); if (msg.text) break; }
+          const elapsed = Date.now() - start;
+          setCurCountdown(CONFIG.timeoutMs - elapsed, CONFIG.timeoutMs);
+          setCurSub(`${requestSent ? "🔄 Đang chờ phản hồi" : "⏳ Đang gửi yêu cầu"} (${(elapsed / 1000).toFixed(1)}s)...`, "ng-sub-run");
         }
+        if (msg.text) setCurSub("✅ Đang xác nhận...", "ng-sub-ok");
 
         let status = classify(msg.text);
         if (status === "SUCCESS" && msg.source !== "response") { status = "NO_RESPONSE"; msg.text = "(popup thành công nhưng chưa bắt được phản hồi mạng)"; }
         closeDialog();
         if (activeAttempt?.id === attemptMeta.id) activeAttempt = null;
+        clearCurCountdown();
 
         if (!["TEMP_ERROR", "NO_RESPONSE"].includes(status)) {
+          setCurSub(`${status === "SUCCESS" ? "✔" : "✘"} ${STATUS_LABELS[status]}`, status === "SUCCESS" ? "ng-sub-ok" : "ng-sub-bad");
           return { stt: `${index}/${total}`, code, status, message: msg.text || "(không thấy phản hồi)" };
         }
         if (attempt <= CONFIG.maxRetries) await sleep(CONFIG.retryDelayMs);
       }
+      setCurSub(`✘ ${STATUS_LABELS.NO_RESPONSE}`, "ng-sub-bad");
       return { stt: `${index}/${total}`, code, status: "NO_RESPONSE", message: "(không thấy phản hồi)" };
     };
 
@@ -890,7 +1007,8 @@
       while (Date.now() - t0 < ms) {
         if (stopRequested) return;
         const left = ms - (Date.now() - t0);
-        statusText.innerText = `Đã đổi ${done}/${total} · code tiếp sau ${(left / 1000).toFixed(1)}s`;
+        setCurSub(`⏸ Đã đổi ${done}/${total} · chuẩn bị code kế tiếp...`, "ng-sub-warn");
+        setCurCountdown(left, ms, "Tiếp sau:");
         await sleep(Math.min(100, left));
       }
     };
@@ -902,7 +1020,7 @@
       if (title) console.log(`%c${title}`, "");
       for (let i = 0; i < codes.length; i++) {
         if (stopRequested) { console.log(`⏹ ĐÃ DỪNG — đã xử lý ${i}/${total}, còn ${total - i} code chưa chạy`); break; }
-        statusText.innerText = `Đang đổi ${i + 1}/${total}...`;
+        setCurSub(`▶ Đang đổi ${i + 1}/${total}...`, "ng-sub-run");
         document.title = `▶ ${i + 1}/${total} · DF Auto Redeem`;
         const r = await redeemOne(codes[i], i + 1, total);
         results.push(r);
@@ -912,7 +1030,6 @@
 
         const note = displayMessage(r);
         console.log(`%c[${r.stt}] ${STATUS_LABELS[r.status]}%c ${r.code}${note ? `: ${note}` : ""}`, "", "");
-        progressBar.style.width = (((i + 1) / total) * 100).toFixed(1) + "%";
         if (r.status === "TEMP_ERROR") {
           backoffMs = Math.min(backoffMs ? backoffMs * 2 : CONFIG.delayBetweenCodesMs, 10000);
           appendLog(`⚠ Bị giới hạn tốc độ — nghỉ thêm ${backoffMs}ms trước code kế tiếp`, "warn");
@@ -954,4 +1071,29 @@
     ];
     return { rows, unrun };
   }
+
+  // ===== KIỂM TRA BẢN CẬP NHẬT =====
+  // MAIN world không gọi được chrome API nên nhờ proxy.js (ISOLATED) fetch hộ:
+  // mình bắn event "ng-df-check-update" ra document, proxy bắt được rồi trả kết quả
+  // về qua event "ng-df-update-result" (detail là JSON string cho an toàn xuyên world)
+  const REPO_URL = "https://github.com/minhkhw/AutoRedeemDF";
+  const updateBanner = document.getElementById("ng-update-banner");
+
+  document.addEventListener("ng-df-update-result", (e) => {
+    let info = null;
+    try { info = JSON.parse(e.detail); } catch (_) { return; }
+    if (!info || !info.updateAvailable || !info.latest) return;
+    const verEl = document.getElementById("ng-upd-ver");
+    if (verEl) verEl.textContent = "v" + info.latest;
+    if (updateBanner) updateBanner.style.display = "flex";
+    appendLog(`🆕 Có bản mới v${info.latest} (đang dùng v${info.current}) — bấm banner trên panel để tải`, "info");
+  });
+
+  if (updateBanner) {
+    updateBanner.addEventListener("click", () => window.open(REPO_URL, "_blank", "noopener"));
+  }
+
+  setTimeout(() => {
+    document.dispatchEvent(new CustomEvent("ng-df-check-update"));
+  }, 1500);
 })();

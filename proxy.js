@@ -83,4 +83,11 @@
       }
     });
   });
+  // Check bản cập nhật: MAIN world bắn event ra document, mình hỏi background rồi trả kết quả về
+  document.addEventListener("ng-df-check-update", () => {
+    chrome.runtime.sendMessage({ action: "checkUpdate" }, (r) => {
+      if (chrome.runtime.lastError || !r || !r.ok || !r.info) return;
+      document.dispatchEvent(new CustomEvent("ng-df-update-result", { detail: JSON.stringify(r.info) }));
+    });
+  });
 })();

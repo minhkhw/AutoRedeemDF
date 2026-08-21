@@ -118,3 +118,31 @@ reloadBtn.addEventListener("click", () => {
 });
 
 renderInfo();
+
+// ===== Kiểm tra bản cập nhật: so version local với manifest.json trên GitHub =====
+const REMOTE_MANIFEST = "https://raw.githubusercontent.com/minhkhw/AutoRedeemDF/refs/heads/main/manifest.json";
+
+const cmpVersions = (a, b) => {
+  const pa = String(a || "").split(".").map(n => parseInt(n, 10) || 0);
+  const pb = String(b || "").split(".").map(n => parseInt(n, 10) || 0);
+  const len = Math.max(pa.length, pb.length);
+  for (let i = 0; i < len; i++) {
+    const d = (pa[i] || 0) - (pb[i] || 0);
+    if (d) return d > 0 ? 1 : -1;
+  }
+  return 0;
+};
+
+(async () => {
+  try {
+    const res = await fetchWithTimeout(REMOTE_MANIFEST + "?t=" + Date.now());
+    if (!res.ok) return;
+    const data = parseJson(await res.text());
+    const latest = (data && typeof data.version === "string" ? data.version.trim() : "");
+    const current = (typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.getManifest)
+      ? chrome.runtime.getManifest().version : "";
+    if (!latest || !current || cmpVersions(latest, current) <= 0) return;
+    document.getElementById("upd-ver").textContent = "v" + latest;
+    document.getElementById("update-banner").style.display = "flex";
+  } catch (_) { /* im lặng — không quấy rầy khi offline */ }
+})();

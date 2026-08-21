@@ -4,7 +4,7 @@
   "version": "1.2",
   "description": "Giao diện tự động đổi code Delta Force",
   "author": "Minh Khương",
-  "permissions": ["activeTab"],
+  "permissions": ["activeTab", "alarms", "storage"],
   "host_permissions": ["https://raw.githubusercontent.com/*", "https://nopaste.net/*"],
   "background": {
     "service_worker": "background.js"

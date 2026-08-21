@@ -128,6 +128,27 @@
   }
   .retry:hover { background: rgba(255, 196, 0, 0.14); }
 
+  /* Banner có bản mới */
+  .upd {
+    display: none; align-items: center; gap: 8px;
+    background: linear-gradient(135deg, rgba(255, 179, 0, 0.14), rgba(255, 140, 0, 0.06));
+    border: 1px solid rgba(255, 186, 0, 0.5);
+    border-radius: 11px;
+    padding: 8px 11px;
+    color: #ffcf7d; font-size: 12px; font-weight: 700;
+    text-decoration: none; cursor: pointer; transition: 0.2s;
+    animation: fadeUp 0.35s ease both;
+  }
+  .upd:hover { border-color: rgba(255, 186, 0, 0.85); background: linear-gradient(135deg, rgba(255, 179, 0, 0.22), rgba(255, 140, 0, 0.1)); }
+  .upd b { color: #ffe3ad; }
+  .upd .upd-ico {
+    flex: none; width: 22px; height: 22px; border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255, 186, 0, 0.16); font-size: 12px;
+  }
+  .upd svg { margin-left: auto; flex: none; opacity: 0.75; transition: transform 0.2s; }
+  .upd:hover svg { transform: translateX(2px); opacity: 1; }
+
   /* Nút chính */
   .cta {
     position: relative; overflow: hidden;
@@ -177,6 +198,12 @@
   </div>
 
   <div class="bd">
+    <a id="update-banner" class="upd" href="https://github.com/minhkhw/AutoRedeemDF" target="_blank" rel="noopener noreferrer" title="Mở trang GitHub để tải bản mới">
+      <span class="upd-ico">🆕</span>
+      <span>Đã có bản mới <b id="upd-ver"></b> — nhấn để tải</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+
     <p class="intro">Extension chạy trực tiếp trên <b>trang đổi code của Garena</b> — panel điều khiển tự xuất hiện ở góc phải dưới màn hình.</p>
 
     <div class="steps">
