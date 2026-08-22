@@ -4,10 +4,11 @@
   const waitEl = (id, cb) => {
     const el = document.getElementById(id);
     if (el) return cb(el);
-    new MutationObserver(() => {
+    const obs = new MutationObserver(() => {
       const el = document.getElementById(id);
-      if (el) { this.disconnect(); cb(el); }
-    }).observe(document.body, { childList: true, subtree: true });
+      if (el) { obs.disconnect(); cb(el); }
+    });
+    obs.observe(document.body, { childList: true, subtree: true });
   };
 
   const ts = () => {
@@ -83,7 +84,7 @@
       }
     });
   });
-  // Check bản cập nhật: MAIN world bắn event ra document, mình hỏi background rồi trả kết quả về
+  // Check bản cập nhật
   document.addEventListener("ng-df-check-update", () => {
     chrome.runtime.sendMessage({ action: "checkUpdate" }, (r) => {
       if (chrome.runtime.lastError || !r || !r.ok || !r.info) return;

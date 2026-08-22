@@ -1,7 +1,4 @@
-// Service worker proxy fetch — nhận message từ proxy.js, fetch từ bên ngoài, trả về
-
 // ===== KIỂM TRA BẢN CẬP NHẬT =====
-// So version extension đang cài với manifest.json trên GitHub; lệch version là có bản mới
 const REMOTE_MANIFEST_URL = "https://raw.githubusercontent.com/minhkhw/AutoRedeemDF/refs/heads/main/manifest.json";
 const UPDATE_INFO_KEY = "ng_df_update_info";
 const UPDATE_ALARM = "ng_df_update_check";

@@ -26,7 +26,6 @@ if (typeof chrome !== "undefined" && chrome.tabs && chrome.tabs.query) {
 }
 
 // Khối NGUỒN CODE MỚI NHẤT: tải file JSON trên GitHub
-// Mỗi lần mở popup đều tải mới; có timeout chống treo
 
 const CODE_SOURCES = [
   "https://raw.githubusercontent.com/minhkhw/AutoRedeemDF/refs/heads/main/code.json"
@@ -119,7 +118,7 @@ reloadBtn.addEventListener("click", () => {
 
 renderInfo();
 
-// ===== Kiểm tra bản cập nhật: so version local với manifest.json trên GitHub =====
+// ===== Kiểm tra bản cập nhật =====
 const REMOTE_MANIFEST = "https://raw.githubusercontent.com/minhkhw/AutoRedeemDF/refs/heads/main/manifest.json";
 
 const cmpVersions = (a, b) => {

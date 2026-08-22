@@ -291,6 +291,9 @@
     #ng-sum-table tr:hover td { background: rgba(0,255,200,0.03); }
     #ng-sum-footer { display: flex; flex-wrap: wrap; gap: 14px; padding: 8px 12px 10px; border-top: 1px solid #182534; font-size: 12px; color: #8fa8bf; align-items: center; }
     #ng-sum-footer b { color: #00ffc8; }
+    #ng-sum-actions { margin-left: auto; display: flex; gap: 6px; }
+    #ng-sum-copy, #ng-sum-csv { background: rgba(0,255,200,0.05); color: #00ffc8; border: 1px solid rgba(0,255,200,0.45); padding: 6px 10px; border-radius: 8px; font-weight: bold; font-size: 11px; letter-spacing: 0.4px; cursor: pointer; transition: 0.2s; font-family: inherit; }
+    #ng-sum-copy:hover, #ng-sum-csv:hover { background: rgba(0,255,200,0.13); border-color: #00ffc8; }
     tr.ng-row-ok td { color: #00e676; }
     tr.ng-row-bad td { color: #ff6b78; }
     tr.ng-row-warn td { color: #ffc400; }
@@ -362,18 +365,69 @@
         <div id="ng-sum-footer">
           <span>⏱ Thời gian: <b>${fmtDur(sessionStats.totalMs)}</b></span>
           <span>⚡ Tốc độ: <b>${avgSec}s/code</b></span>
+          <span id="ng-sum-actions">
+            <button id="ng-sum-copy" title="Copy danh sách kết quả vào clipboard (theo bộ lọc đang chọn)">📋 COPY</button>
+            <button id="ng-sum-csv" title="Tải kết quả ra file CSV (mở được bằng Excel)">⬇ CSV</button>
+          </span>
         </div>
       </div>
     `;
     modal.style.display = "flex";
     document.getElementById("ng-sum-close").onclick = closeSummary;
+    let sumFilterLabel = "";
     modal.querySelectorAll(".ng-pill").forEach(p => {
       p.onclick = () => {
         const label = p.dataset.label;
+        sumFilterLabel = label;
         modal.querySelectorAll(".ng-pill").forEach(x => x.classList.toggle("ng-pill-active", x === p));
         modal.querySelectorAll("#ng-sum-table tbody tr").forEach(tr => { tr.style.display = (!label || tr.dataset.label === label) ? "" : "none"; });
       };
     });
+    const filteredRows = () => lastSummary.filter(r => !sumFilterLabel || r.label === sumFilterLabel);
+    const stampNow = () => { const d = new Date(), p = n => String(n).padStart(2, "0"); return `${p(d.getDate())}/${p(d.getMonth() + 1)}/${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`; };
+    document.getElementById("ng-sum-copy").onclick = async () => {
+      const rows = filteredRows();
+      if (!rows.length) return;
+      const okN = rows.filter(r => r.status === "SUCCESS").length;
+      const text = [
+        `KẾT QUẢ ĐỔI CODE DELTA FORCE — ${stampNow()}${sumFilterLabel ? ` (lọc: ${sumFilterLabel})` : ""}`,
+        `Thành công: ${okN}/${rows.length}`,
+        "",
+        ...rows.map((r, i) => `${i + 1}. ${r.code} — ${r.label}${r.note ? ` — ${r.note}` : ""}`)
+      ].join("\n");
+      let copied = false;
+      try { await navigator.clipboard.writeText(text); copied = true; } catch (_) {}
+      if (!copied) {
+        try {
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          ta.style.cssText = "position:fixed;left:-9999px;top:0;opacity:0";
+          document.body.appendChild(ta);
+          ta.focus(); ta.select();
+          copied = document.execCommand("copy");
+          ta.remove();
+        } catch (_) {}
+      }
+      appendLog(copied ? `📋 Đã copy ${rows.length} kết quả vào clipboard` : "⚠ Không copy được vào clipboard", copied ? "info" : "bad");
+    };
+    document.getElementById("ng-sum-csv").onclick = () => {
+      const rows = filteredRows();
+      if (!rows.length) return;
+      const escCsv = v => `"${String(v == null ? "" : v).replace(/"/g, '""')}"`;
+      const csv = [
+        ["STT", "CODE", "TRẠNG THÁI", "THÔNG BÁO"].map(escCsv).join(";"),
+        ...rows.map((r, i) => [i + 1, r.code, r.label, r.note || ""].map(escCsv).join(";"))
+      ].join("\r\n");
+      const d = new Date(), p = n => String(n).padStart(2, "0");
+      const name = `df-redeem-${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}.csv`;
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" }));
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+      appendLog(`⬇ Đã tải ${name} (${rows.length} dòng)`, "info");
+    };
   };
   modal.addEventListener("click", e => { if (e.target === modal) closeSummary(); });
 
@@ -515,7 +569,7 @@
 
   const logBox = document.getElementById("ng-log-box");
 
-  // ===== CARD "ĐANG CHẠY" — code hiện tại + đếm ngược kiểu CD =====
+  // ===== CARD "ĐANG CHẠY" =====
   const curCard = document.getElementById("ng-cur-card");
   const curCodeEl = document.getElementById("ng-cur-code");
   const curTimerEl = document.getElementById("ng-cur-timer");
@@ -739,7 +793,14 @@
     totalCodesCount = codeList.length;
     updateStatsBox();
 
-    const outcome = await startRedeemProcess(codeList.join("\n"));
+    let outcome = null;
+    let runError = null;
+    try {
+      outcome = await startRedeemProcess(codeList.join("\n"));
+    } catch (e) {
+      runError = (e && e.message) || String(e);
+      appendLog(`❌ Lỗi không mong muốn khi chạy: ${escHtml(runError)}`, "bad");
+    }
     const stopped = stopRequested;
 
     if (outcome) {
@@ -761,7 +822,7 @@
     sessionStats.totalMs += Date.now() - runT0;
     if (originalPageTitle !== null) { document.title = originalPageTitle; originalPageTitle = null; }
     if (outcome) resetCurCard(stopped ? "⏹ Đã dừng theo yêu cầu" : "✔ Hoàn tất!", stopped ? "ng-sub-warn" : "ng-sub-ok");
-    else resetCurCard("❌ Lỗi: chưa thấy ô nhập/nút Đổi!", "ng-sub-bad");
+    else resetCurCard(runError ? `❌ Lỗi: ${runError}` : "❌ Lỗi: chưa thấy ô nhập/nút Đổi!", "ng-sub-bad");
     appendLog("=== HOÀN TẤT QUÁ TRÌNH ===", "title");
     // Cập nhật stats box lần cuối
     updateStatsBox();
@@ -875,6 +936,14 @@
     };
     const captureRequestStart = meta => { if (meta.attemptId && meta.requestCode) requestStarts.push({ time: Date.now(), ...meta }); };
 
+    const visible = el => { if (!el) return false; const s = getComputedStyle(el), r = el.getBoundingClientRect(); return s.display !== "none" && s.visibility !== "hidden" && r.width > 0 && r.height > 0; };
+    const setValue = (input, value) => { const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value").set; setter.call(input, value); input.dispatchEvent(new Event("input", { bubbles: true })); input.dispatchEvent(new Event("change", { bubbles: true })); input.dispatchEvent(new KeyboardEvent("keyup", { bubbles: true })); };
+    const findInput = () => document.querySelector(".exc-input") || [...document.querySelectorAll("input")].find(el => visible(el) && !el.disabled && !el.readOnly);
+    const findButton = () => document.querySelector(".btn-exchange") || [...document.querySelectorAll("a,button")].find(el => visible(el) && el.innerText.trim() === "Đổi");
+
+    // Kiểm tra trước khi cài hook — thiếu ô nhập/nút thì thoát sạch, không phải gỡ hook
+    if (!findInput() || !findButton()) { console.error("Không tìm thấy ô nhập hoặc nút Đổi."); return null; }
+
     if (originalFetch) {
       window.fetch = async (...args) => {
         const attempt = activeAttempt ? { ...activeAttempt } : null;
@@ -895,13 +964,6 @@
         return originalXhrSend.apply(this, args);
       };
     }
-
-    const visible = el => { if (!el) return false; const s = getComputedStyle(el), r = el.getBoundingClientRect(); return s.display !== "none" && s.visibility !== "hidden" && r.width > 0 && r.height > 0; };
-    const setValue = (input, value) => { const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value").set; setter.call(input, value); input.dispatchEvent(new Event("input", { bubbles: true })); input.dispatchEvent(new Event("change", { bubbles: true })); input.dispatchEvent(new KeyboardEvent("keyup", { bubbles: true })); };
-    const findInput = () => document.querySelector(".exc-input") || [...document.querySelectorAll("input")].find(el => visible(el) && !el.disabled && !el.readOnly);
-    const findButton = () => document.querySelector(".btn-exchange") || [...document.querySelectorAll("a,button")].find(el => visible(el) && el.innerText.trim() === "Đổi");
-
-    if (!findInput() || !findButton()) { console.error("Không tìm thấy ô nhập hoặc nút Đổi."); return null; }
 
     const getMessage = () => {
       const dialog = [...document.querySelectorAll('[role="dialog"], .dialog, .pop, .popup, .modal')].find(visible);
@@ -1052,30 +1114,30 @@
     console.log(`Tổng code: ${CODES.length}${RUN_CODES.length < CODES.length ? ` (chạy ${RUN_CODES.length})` : ""}`);
     console.log(`Tốc độ: nghỉ ~${CONFIG.delayBetweenCodesMs}ms${CONFIG.jitterDelay ? " (±20% ngẫu nhiên)" : ""}/code · chờ phản hồi ${CONFIG.timeoutMs}ms · bấm Đổi ${CONFIG.submitClickRetries} lần · thử lại ${CONFIG.maxRetries}`);
 
-    const results = await runBatch(RUN_CODES);
+    try {
+      const results = await runBatch(RUN_CODES);
 
-    // Ghi lịch sử code đã có kết quả 
-    const hist = loadCodeHistory();
-    results.forEach(r => { if (TERMINAL_STATUSES.includes(r.status)) hist[r.code] = { s: STATUS_LABELS[r.status] || r.status, t: Date.now() }; });
-    saveCodeHistory(hist);
-    
-    const okCount = results.filter(r => r.status === "SUCCESS").length;
-    console.log(`%cKẾT QUẢ TỔNG KẾT%c ${okCount}/${results.length} code thành công — nhấn nút TỔNG KẾT để xem chi tiết`, "", "");
+      // Ghi lịch sử code đã có kết quả
+      const hist = loadCodeHistory();
+      results.forEach(r => { if (TERMINAL_STATUSES.includes(r.status)) hist[r.code] = { s: STATUS_LABELS[r.status] || r.status, t: Date.now() }; });
+      saveCodeHistory(hist);
 
-    restoreHooks();
-    const doneCodes = new Set(results.map(r => r.code));
-    const unrun = stopRequested ? RUN_CODES.filter(c => !doneCodes.has(c)) : [];
-    const rows = [
-      ...skippedRows.map(r => ({ ...r, stt: "", label: STATUS_LABELS[r.status] || "Đã bỏ qua" })),
-      ...results.map(r => ({ stt: r.stt, code: r.code, status: r.status, label: STATUS_LABELS[r.status] || "Khác", note: displayMessage(r) || "" }))
-    ];
-    return { rows, unrun };
+      const okCount = results.filter(r => r.status === "SUCCESS").length;
+      console.log(`%cKẾT QUẢ TỔNG KẾT%c ${okCount}/${results.length} code thành công — nhấn nút TỔNG KẾT để xem chi tiết`, "", "");
+
+      const doneCodes = new Set(results.map(r => r.code));
+      const unrun = stopRequested ? RUN_CODES.filter(c => !doneCodes.has(c)) : [];
+      const rows = [
+        ...skippedRows.map(r => ({ ...r, stt: "", label: STATUS_LABELS[r.status] || "Đã bỏ qua" })),
+        ...results.map(r => ({ stt: r.stt, code: r.code, status: r.status, label: STATUS_LABELS[r.status] || "Khác", note: displayMessage(r) || "" }))
+      ];
+      return { rows, unrun };
+    } finally {
+      restoreHooks();
+    }
   }
 
   // ===== KIỂM TRA BẢN CẬP NHẬT =====
-  // MAIN world không gọi được chrome API nên nhờ proxy.js (ISOLATED) fetch hộ:
-  // mình bắn event "ng-df-check-update" ra document, proxy bắt được rồi trả kết quả
-  // về qua event "ng-df-update-result" (detail là JSON string cho an toàn xuyên world)
   const REPO_URL = "https://github.com/minhkhw/AutoRedeemDF";
   const updateBanner = document.getElementById("ng-update-banner");
 
