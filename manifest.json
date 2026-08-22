@@ -1,11 +1,12 @@
 {
   "manifest_version": 3,
   "name": "Delta Force Auto Redeem",
-  "version": "1.3",
+  "version": "1.3.1",
   "description": "Giao diện tự động đổi code Delta Force",
   "author": "Minh Khương",
-  "permissions": ["activeTab", "alarms", "storage"],
-  "host_permissions": ["https://raw.githubusercontent.com/*", "https://nopaste.net/*"],
+  "minimum_chrome_version": "111",
+  "permissions": ["activeTab", "storage"],
+  "host_permissions": ["https://raw.githubusercontent.com/*", "https://cdn.jsdelivr.net/*", "https://nopaste.net/*"],
   "background": {
     "service_worker": "background.js"
   },

@@ -1,7 +1,6 @@
 // ===== KIỂM TRA BẢN CẬP NHẬT =====
 const REMOTE_MANIFEST_URL = "https://raw.githubusercontent.com/minhkhw/AutoRedeemDF/refs/heads/main/manifest.json";
 const UPDATE_INFO_KEY = "ng_df_update_info";
-const UPDATE_ALARM = "ng_df_update_check";
 
 const cmpVersions = (a, b) => {
   const pa = String(a || "").split(".").map(n => parseInt(n, 10) || 0);
@@ -41,15 +40,15 @@ const checkUpdate = async () => {
   } catch (_) { return null; }
 };
 
+// Không cần alarm định kỳ: popup và content script (proxy.js) tự gọi checkUpdate mỗi khi mở/vào trang
 chrome.runtime.onInstalled.addListener(checkUpdate);
 chrome.runtime.onStartup.addListener(checkUpdate);
-chrome.alarms.create(UPDATE_ALARM, { periodInMinutes: 360 });
-chrome.alarms.onAlarm.addListener(a => { if (a.name === UPDATE_ALARM) checkUpdate(); });
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.action === "fetchJson") {
     const sources = [
-      "https://raw.githubusercontent.com/minhkhw/AutoRedeemDF/refs/heads/main/code.json"
+      "https://raw.githubusercontent.com/minhkhw/AutoRedeemDF/refs/heads/main/code.json",
+      "https://cdn.jsdelivr.net/gh/minhkhw/AutoRedeemDF@main/code.json"
     ];
     (async () => {
       for (const src of sources) {

@@ -4,7 +4,7 @@
 
 **Giao diện tự động đổi gift code Delta Force trên trang đổi code Garena**
 
-![Version](https://img.shields.io/badge/version-1.3-00e8bd)
+![Version](https://img.shields.io/badge/version-1.3.1-00e8bd)
 ![License](https://img.shields.io/badge/license-MIT-00a4d2)
 ![Chrome](https://img.shields.io/badge/Chrome-%E2%89%A5111-ffc400)
 
@@ -23,9 +23,10 @@ Extension chèn một panel điều khiển ngay trên trang [redeem.df.garena.s
 - ⏭ **Bỏ qua code đã thử** — nhớ lịch sử (tối đa 500 code) ở lần chạy sau
 - 🔁 **Chạy lại thông minh** — nút CHẠY LẠI chỉ chạy lại code lỗi tạm thời / chưa chạy xong
 - 🛡 **Chống rate-limit** — delay ngẫu nhiên ±20%, tự backoff lũy tiến khi bị giới hạn tốc độ
+- 🔇 **Giữ tốc độ khi tab nền** — phát âm thanh gần câm trong lúc chạy để Chrome không làm chậm timer khi bạn chuyển tab
 - ☁️ **Tải code từ nguồn** — một nút kéo danh sách code mới nhất từ GitHub về ô nhập
 - 🔔 **Báo khi hoàn tất** — tiếng beep + nhấp nháy tiêu đề tab
-- 🆕 **Tự kiểm tra bản cập nhật** — mỗi 6 giờ, hiện banner + badge `!` trên icon khi có bản mới
+- 🆕 **Tự kiểm tra bản cập nhật** — mỗi khi mở popup hoặc vào trang đổi code, hiện banner + badge `!` trên icon khi có bản mới
 
 ## 📸 Hình ảnh
 
@@ -149,7 +150,7 @@ Toàn bộ cài đặt và lịch sử code nằm trong `localStorage` của tra
 <details>
 <summary><b>Làm sao cập nhật extension?</b></summary>
 
-Extension tự so sánh phiên bản với repo mỗi 6 giờ — khi có bản mới sẽ hiện banner vàng trong panel/popup và badge `!` trên icon. Khi đó:
+Extension tự so sánh phiên bản với repo mỗi khi mở popup hoặc vào trang đổi code — khi có bản mới sẽ hiện banner vàng trong panel/popup và badge `!` trên icon. Khi đó:
 
 1. Tải bản mới từ repo (ZIP hoặc `git pull`) và ghi đè thư mục cũ
 2. Vào `chrome://extensions` → bấm icon **↻** (Reload) trên card extension
@@ -163,9 +164,9 @@ Extension **không thu thập** thông tin cá nhân, không có analytics, khô
 | Quyền | Mục đích |
 | :--- | :--- |
 | `activeTab` | Đọc địa chỉ tab hiện tại để hiện trạng thái SẴN SÀNG / CHƯA SẴN SÀNG |
-| `alarms` | Hẹn giờ kiểm tra bản cập nhật mỗi 6 giờ |
 | `storage` | Lưu kết quả kiểm tra phiên bản gần nhất |
 | `raw.githubusercontent.com` | Tải danh sách code (`code.json`) và manifest để kiểm tra cập nhật |
+| `cdn.jsdelivr.net` | Nguồn dự phòng khi GitHub Raw chậm hoặc bị chặn |
 
 Cơ chế hoạt động: extension mô phỏng đúng thao tác tay (nhập code vào ô, bấm nút Đổi) trên trang đổi code, đồng thời đọc phản hồi của chính trang đó để phân loại kết quả — không can thiệp gì khác vào tài khoản của bạn.
 
@@ -183,8 +184,9 @@ Cơ chế hoạt động: extension mô phỏng đúng thao tác tay (nhập cod
 
 ## 📝 Cập nhật
 
+- **v1.3.1** — Thêm nguồn dự phòng jsDelivr; giới hạn nhật ký 200 dòng; bỏ quyền `alarms` dư thừa; khai báo yêu cầu Chrome ≥ 111
 - **v1.3** — Sửa lỗi nút tải code khi panel khởi tạo chậm; hết kẹt nút DỪNG nếu chạy lỗi giữa chừng; luôn trả lại hook fetch/XHR cho trang; thêm COPY/CSV trong Tổng kết
-- Các bản trước — xem [lịch sử commit](https://github.com/minhkhw/AutoRedeemDF/commits/main)
+
 
 ## 👨‍💻 Tác giả
 

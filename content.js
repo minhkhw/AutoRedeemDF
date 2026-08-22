@@ -604,6 +604,7 @@
     const ts = [t.getHours(), t.getMinutes(), t.getSeconds()].map(x => String(x).padStart(2, "0")).join(":");
     div.innerHTML = `<span class="log-time">${ts}</span>${html}`;
     logBox.appendChild(div);
+    while (logBox.children.length > 200) logBox.removeChild(logBox.firstChild);
     logBox.scrollTop = logBox.scrollHeight;
   }
 
@@ -751,6 +752,30 @@
       osc.start(t0); osc.stop(t0 + 0.34);
     });
   };
+  // Âm thanh gần câm trong lúc chạy: tab bị Chrome coi là "đang phát âm thanh"
+  // → được miễn intensive throttling của setTimeout khi tab ở nền
+  let keepAliveOsc = null, keepAliveGain = null;
+  const startKeepAlive = () => {
+    const ctx = ensureAudio();
+    if (!ctx || keepAliveOsc) return;
+    try {
+      keepAliveGain = ctx.createGain();
+      keepAliveGain.gain.value = 0.004;
+      keepAliveOsc = ctx.createOscillator();
+      keepAliveOsc.type = "sine";
+      keepAliveOsc.frequency.value = 30;
+      keepAliveOsc.connect(keepAliveGain);
+      keepAliveGain.connect(ctx.destination);
+      keepAliveOsc.start();
+    } catch (_) { keepAliveOsc = null; keepAliveGain = null; }
+  };
+  const stopKeepAlive = () => {
+    try {
+      if (keepAliveOsc) { keepAliveOsc.stop(); keepAliveOsc.disconnect(); }
+      if (keepAliveGain) keepAliveGain.disconnect();
+    } catch (_) {}
+    keepAliveOsc = null; keepAliveGain = null;
+  };
   const notifyDone = text => {
     beepDone();
     panel.classList.add("ng-done-glow");
@@ -772,7 +797,8 @@
   };
 
   async function runCodes(codeList) {
-    ensureAudio(); 
+    ensureAudio();
+    startKeepAlive();
     stopTitleNotify();
     originalPageTitle = document.title;
     const runT0 = Date.now();
@@ -781,6 +807,7 @@
     startBtn.classList.add("ng-running", "ng-stop-mode");
     startBtnText.innerText = "DỪNG";
     logBox.innerHTML = "";
+    if (document.hidden) appendLog("🔊 Phát âm thanh gần câm — giữ tốc độ khi tab ở nền", "info");
     curCard.classList.add("ng-cur-live");
     curCodeEl.textContent = "·····";
     setCurSub("Đang xử lý...", "ng-sub-run");
@@ -830,6 +857,7 @@
       const okN = lastSummary.filter(r => r.status === "SUCCESS").length;
       notifyDone(stopped ? `⏹ ĐÃ DỪNG ${okN}/${lastSummary.length} CODE` : `✔ ${okN}/${lastSummary.length} CODE THÀNH CÔNG`);
     }
+    stopKeepAlive();
   }
 
   // Thống kê danh sách code theo thời gian thực 

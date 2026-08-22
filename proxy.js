@@ -23,6 +23,7 @@
     div.className = "log-line log-" + type;
     div.innerHTML = `<span class="log-time">${ts()}</span>${html}`;
     box.appendChild(div);
+    while (box.children.length > 200) box.removeChild(box.firstChild);
     box.scrollTop = box.scrollHeight;
   };
 

@@ -28,7 +28,8 @@ if (typeof chrome !== "undefined" && chrome.tabs && chrome.tabs.query) {
 // Khối NGUỒN CODE MỚI NHẤT: tải file JSON trên GitHub
 
 const CODE_SOURCES = [
-  "https://raw.githubusercontent.com/minhkhw/AutoRedeemDF/refs/heads/main/code.json"
+  "https://raw.githubusercontent.com/minhkhw/AutoRedeemDF/refs/heads/main/code.json",
+  "https://cdn.jsdelivr.net/gh/minhkhw/AutoRedeemDF@main/code.json"
 ];
 
 const cleanText = html => html
