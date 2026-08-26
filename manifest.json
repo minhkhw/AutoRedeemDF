@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Delta Force Auto Redeem",
-  "version": "1.4",
+  "version": "1.4.1",
   "description": "Giao diện tự động đổi code Delta Force",
   "author": "Minh Khương",
   "minimum_chrome_version": "111",
