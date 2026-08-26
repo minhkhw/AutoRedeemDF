@@ -4,7 +4,7 @@
 
 **Giao diện tự động đổi gift code Delta Force trên trang đổi code Garena**
 
-![Version](https://img.shields.io/badge/version-1.4-00e8bd)
+![Version](https://img.shields.io/badge/version-1.4.1-00e8bd)
 ![License](https://img.shields.io/badge/license-MIT-00a4d2)
 ![Chrome](https://img.shields.io/badge/Chrome-%E2%89%A5111-ffc400)
 
