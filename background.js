@@ -40,7 +40,6 @@ const checkUpdate = async () => {
   } catch (_) { return null; }
 };
 
-// Không cần alarm định kỳ: popup và content script (proxy.js) tự gọi checkUpdate mỗi khi mở/vào trang
 chrome.runtime.onInstalled.addListener(checkUpdate);
 chrome.runtime.onStartup.addListener(checkUpdate);
 

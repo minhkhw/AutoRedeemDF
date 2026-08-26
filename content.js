@@ -320,9 +320,66 @@
     .ng-set-check input { width: 18px; height: 18px; accent-color: #00ffc8; cursor: pointer; }
     #ng-set-clear-hist { background: rgba(255,82,82,0.05); color: #ff6b78; border: 1px solid rgba(255,82,82,0.55); padding: 9px 10px; border-radius: 10px; font-weight: bold; font-size: 11px; cursor: pointer; transition: 0.2s; white-space: nowrap; }
     #ng-set-clear-hist:hover { background: rgba(255,82,82,0.14); }
+
+    /* ===== ĐIỆN THOẠI / MÀN HẸP (extension trên Kiwi, Lemur, Edge Canary...) ===== */
+    #ng-header { touch-action: none; -webkit-user-select: none; user-select: none; }
+    #redeem-ui, #ng-sum-card, #ng-set-card, #ng-summary-modal, #ng-settings-modal { box-sizing: border-box; }
+    #redeem-ui button, #ng-sum-card button, #ng-set-card button { touch-action: manipulation; }
+    html.ng-df-mobile #redeem-ui {
+      right: 8px; left: auto;
+      bottom: calc(8px + var(--ng-kb, 0px));
+      width: min(calc(100vw - 16px), 460px);
+      max-height: 86vh; max-height: 86dvh;
+      border-radius: 14px;
+    }
+    html.ng-df-mobile #ng-header { border-radius: 14px 14px 0 0; padding: 8px 10px; }
+    html.ng-df-mobile #ng-settings-btn, html.ng-df-mobile #ng-minimize { width: 36px; height: 32px; }
+    html.ng-df-mobile .ng-mini-btn { width: 34px; height: 30px; }
+    html.ng-df-mobile #ng-body { padding: 10px 10px 4px; gap: 8px; }
+    html.ng-df-mobile #ng-code-input { font-size: 16px; min-height: 58px; max-height: 96px; }
+    html.ng-df-mobile .ng-set-input { font-size: 16px; }
+    html.ng-df-mobile #ng-start-btn { padding: 13px 8px; }
+    html.ng-df-mobile #ng-retry-btn, html.ng-df-mobile #ng-summary-btn { font-size: 11px; padding: 11px 4px; }
+    html.ng-df-mobile #ng-cur-code { font-size: 15px; letter-spacing: 0.5px; }
+    html.ng-df-mobile .ng-stat-lbl { font-size: 8px; letter-spacing: 0.4px; }
+    html.ng-df-mobile #ng-sum-card, html.ng-df-mobile #ng-set-card { width: calc(100vw - 20px); max-width: 500px; max-height: 86vh; max-height: 86dvh; }
+    html.ng-df-mobile #ng-set-actions { flex-wrap: wrap; }
+    html.ng-df-mobile #ng-set-save { flex: 1 1 100%; order: -1; }
+    html.ng-df-mobile #ng-set-clear-hist { flex: 1; }
+    html.ng-df-mobile #ng-set-presets button { font-size: 10px; padding: 10px 2px; }
+    html.ng-df-mobile #ng-sum-table { font-size: 11px; }
+    html.ng-df-mobile #ng-sum-table th, html.ng-df-mobile #ng-sum-table td { padding: 5px 6px; }
+    html.ng-df-mobile #ng-sum-footer { gap: 6px 10px; font-size: 11px; }
+    html.ng-df-mobile #ng-sum-actions { margin-left: 0; }
   `;
   document.head.appendChild(style);
   document.body.appendChild(panel);
+
+  // ===== NHẬN DIỆN ĐIỆN THOẠI / MÀN HẸP =====
+  const mqCoarse = window.matchMedia ? window.matchMedia("(pointer: coarse)") : null;
+  if (mqCoarse && mqCoarse.matches && !document.querySelector('meta[name="viewport"]')) {
+    const metaVp = document.createElement("meta");
+    metaVp.setAttribute("name", "viewport");
+    metaVp.setAttribute("content", "width=device-width, initial-scale=1");
+    document.head.appendChild(metaVp);
+  }
+  const resetPanelPos = () => { panel.style.left = panel.style.top = panel.style.right = panel.style.bottom = ""; };
+  const applyViewportMode = () => {
+    const narrow = window.innerWidth <= 560 || (window.visualViewport && window.visualViewport.width <= 560);
+    document.documentElement.classList.toggle("ng-df-mobile", !!(mqCoarse && mqCoarse.matches) || !!narrow);
+    if (document.documentElement.classList.contains("ng-df-mobile")) resetPanelPos();
+  };
+  applyViewportMode();
+  if (mqCoarse && mqCoarse.addEventListener) mqCoarse.addEventListener("change", applyViewportMode);
+  window.addEventListener("resize", () => {
+    const dragged = panel.style.left !== "" || panel.style.top !== "";
+    applyViewportMode();
+    if (dragged) {
+      const r = panel.getBoundingClientRect();
+      if (r.left < 0 || r.top < 0 || r.right > window.innerWidth || r.bottom > window.innerHeight) resetPanelPos();
+    }
+  });
+  window.addEventListener("orientationchange", () => setTimeout(applyViewportMode, 350));
 
   // ===== MODAL TỔNG KẾT =====
   let lastSummary = null;
@@ -550,22 +607,42 @@
     }
   };
 
+  // Kéo panel bằng chuột lẫn cảm ứng 
   const header = document.getElementById("ng-header");
-  let isDragging = false, offsetX, offsetY;
-  header.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    offsetX = e.clientX - panel.getBoundingClientRect().left;
-    offsetY = e.clientY - panel.getBoundingClientRect().top;
-    panel.style.right = 'auto';
-    panel.style.bottom = 'auto';
+  let dragId = null, dragX = 0, dragY = 0;
+  header.addEventListener("pointerdown", e => {
+    if (e.target.closest("button")) return;
+    dragId = e.pointerId;
+    const r = panel.getBoundingClientRect();
+    dragX = e.clientX - r.left;
+    dragY = e.clientY - r.top;
+    panel.style.right = "auto";
+    panel.style.bottom = "auto";
+    panel.style.left = r.left + "px";
+    panel.style.top = r.top + "px";
   });
-  document.addEventListener('mousemove', (e) => {
-    if (isDragging) {
-      panel.style.left = (e.clientX - offsetX) + 'px';
-      panel.style.top = (e.clientY - offsetY) + 'px';
-    }
+  document.addEventListener("pointermove", e => {
+    if (dragId === null || e.pointerId !== dragId) return;
+    const maxX = Math.max(0, window.innerWidth - panel.offsetWidth);
+    const maxY = Math.max(0, window.innerHeight - Math.min(panel.offsetHeight, window.innerHeight));
+    panel.style.left = Math.min(Math.max(0, e.clientX - dragX), maxX) + "px";
+    panel.style.top = Math.min(Math.max(0, e.clientY - dragY), maxY) + "px";
   });
-  document.addEventListener('mouseup', () => isDragging = false);
+  const endDrag = e => { if (dragId !== null && e.pointerId === dragId) dragId = null; };
+  document.addEventListener("pointerup", endDrag);
+  document.addEventListener("pointercancel", endDrag);
+
+  if (window.visualViewport) {
+    const vv = window.visualViewport;
+    const adjustKeyboard = () => {
+      const kb = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
+      const typing = kb > 60 && (panel.contains(document.activeElement) || settingsModal.contains(document.activeElement));
+      panel.style.setProperty("--ng-kb", typing ? kb + "px" : "0px");
+      panel.style.maxHeight = typing ? Math.max(180, vv.height - 16) + "px" : "";
+    };
+    vv.addEventListener("resize", adjustKeyboard);
+    vv.addEventListener("scroll", adjustKeyboard);
+  }
 
   const logBox = document.getElementById("ng-log-box");
 
@@ -752,8 +829,7 @@
       osc.start(t0); osc.stop(t0 + 0.34);
     });
   };
-  // Âm thanh gần câm trong lúc chạy: tab bị Chrome coi là "đang phát âm thanh"
-  // → được miễn intensive throttling của setTimeout khi tab ở nền
+  // Âm thanh gần câm trong lúc chạy
   let keepAliveOsc = null, keepAliveGain = null;
   const startKeepAlive = () => {
     const ctx = ensureAudio();

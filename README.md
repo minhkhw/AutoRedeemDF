@@ -4,7 +4,7 @@
 
 **Giao diện tự động đổi gift code Delta Force trên trang đổi code Garena**
 
-![Version](https://img.shields.io/badge/version-1.3.1-00e8bd)
+![Version](https://img.shields.io/badge/version-1.4-00e8bd)
 ![License](https://img.shields.io/badge/license-MIT-00a4d2)
 ![Chrome](https://img.shields.io/badge/Chrome-%E2%89%A5111-ffc400)
 
@@ -102,6 +102,14 @@ Nút ☁️ trên panel tải `code.json` từ repo này, rồi tải tiếp dan
 - `note` — ghi chú hiển thị trong popup
 
 ## ❓ FAQ
+<details>
+<summary><b>Cài trên điện thoại như nào?</b></summary>
+
+- Tải ứng dụng Kiwi, Lemur, Edge Canary...
+- Sau đó tải repo về và vào ứng dụng đã tải nhấn vào tiện ích mở rộng
+- Nhấn tải file zip vừa tải về và tận hưởng ở [redeem.df.garena.sg](https://redeem.df.garena.sg/)
+</details>
+
 
 <details>
 <summary><b>Panel không hiện trên trang đổi code?</b></summary>
@@ -183,7 +191,7 @@ Cơ chế hoạt động: extension mô phỏng đúng thao tác tay (nhập cod
 | `icons/` | Icon các kích thước |
 
 ## 📝 Cập nhật
-
+- **v1.4** — Tối ưu để sử dụng panel trên điện thoại
 - **v1.3.1** — Thêm nguồn dự phòng jsDelivr; giới hạn nhật ký 200 dòng; bỏ quyền `alarms` dư thừa; khai báo yêu cầu Chrome ≥ 111
 - **v1.3** — Sửa lỗi nút tải code khi panel khởi tạo chậm; hết kẹt nút DỪNG nếu chạy lỗi giữa chừng; luôn trả lại hook fetch/XHR cho trang; thêm COPY/CSV trong Tổng kết
 
