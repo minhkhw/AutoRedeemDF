@@ -14,6 +14,12 @@ Extension chèn một panel điều khiển ngay trên trang [redeem.df.garena.s
 
 ---
 
+> ## 📱 ĐÃ HỖ TRỢ SỬ DỤNG TRÊN ĐIỆN THOẠI
+>
+> Từ **bản v1.4**, panel đã được tối ưu hoàn toàn cho màn hình nhỏ: tự co giãn theo khung hình, kéo thả được bằng cảm ứng, phông chữ/input cỡ lớn để gõ dễ dàng trên điện thoại.
+>
+> Chỉ cần một trình duyệt Android nhân Chromium hỗ trợ nạp extension (**Kiwi Browser, Lemur Browser, Mises Browser, Edge Canary**...) — làm đúng 3 bước trong mục [Cài trên điện thoại](#-cài-trên-điện-thoại) là dùng như trên máy tính.
+
 ## ✨ Tính năng
 
 - ⚡ **Đổi hàng loạt** — dán danh sách code (mỗi code một dòng), tự động loại trùng
@@ -66,6 +72,22 @@ git clone https://github.com/minhkhw/AutoRedeemDF.git
 2. Panel **AUTO REDEEM** tự xuất hiện ở góc phải dưới màn hình
 3. Dán danh sách code → chọn tốc độ → bấm **BẮT ĐẦU**
 
+## 📱 Cài trên điện thoại
+
+> ✅ Từ bản **v1.4** trở đi, panel đã tối ưu cho điện thoại — dùng hoàn toàn giống trên máy tính.
+
+**Yêu cầu:** điện thoại Android + một trong các trình duyệt hỗ trợ nạp extension tự do: **Kiwi Browser**, **Lemur Browser**, **Mises Browser** hoặc **Edge Canary**.
+
+**Các bước cài:**
+
+1. Tải trình duyệt ở trên về từ Google Play (Kiwi hiện có thể phải tải từ trang chủ hoặc các kênh lưu trữ của tác giả)
+2. Tải ZIP của repo này về máy (`Code` → `Download ZIP`) rồi **giải nén** bằng ứng dụng quản lý file
+3. Mở trình duyệt → menu (⋮) → **Tiện ích mở rộng / Extensions** → bật **Chế độ nhà phát triển / Developer mode**
+4. Chọn **Tải tiện ích đã giải nén / Load unpacked** → trỏ tới thư mục vừa giải nén
+5. Vào [redeem.df.garena.sg](https://redeem.df.garena.sg/) và đăng nhập Garena — panel sẽ tự xuất hiện để bạn sử dụng
+
+> 💡 Lưu ý: trình duyệt cần giữ thư mục extension nguyên vẹn, không xoá sau khi giải nén. Nếu panel không hiện, thử F5 lại trang hoặc vào Kiwi/Lemur kiểm tra extension đã được bật.
+
 ## 🚀 Sử dụng
 
 ### Quy trình cơ bản
@@ -103,11 +125,9 @@ Nút ☁️ trên panel tải `code.json` từ repo này, rồi tải tiếp dan
 
 ## ❓ FAQ
 <details>
-<summary><b>Cài trên điện thoại như nào?</b></summary>
+<summary><b>Cài trên điện thoại như nào?</b></summary>
 
-- Tải ứng dụng Kiwi, Lemur, Edge Canary...
-- Sau đó tải repo về và vào ứng dụng đã tải nhấn vào tiện ích mở rộng
-- Nhấn tải file zip vừa tải về và tận hưởng ở [redeem.df.garena.sg](https://redeem.df.garena.sg/)
+Đã hỗ trợ đầy đủ từ bản v1.4! Xem hướng dẫn chi tiết tại mục [📱 Cài trên điện thoại](#-cài-trên-điện-thoại): cần trình duyệt Android có nạp extension (Kiwi, Lemur, Mises, Edge Canary), tải ZIP về giải nén rồi nạp qua **Chế độ nhà phát triển** của trình duyệt đó.
 </details>
 
 
@@ -175,6 +195,7 @@ Extension **không thu thập** thông tin cá nhân, không có analytics, khô
 | `storage` | Lưu kết quả kiểm tra phiên bản gần nhất |
 | `raw.githubusercontent.com` | Tải danh sách code (`code.json`) và manifest để kiểm tra cập nhật |
 | `cdn.jsdelivr.net` | Nguồn dự phòng khi GitHub Raw chậm hoặc bị chặn |
+| `nopaste.net` | Tải file danh sách code tạm (URL nằm trong `code.json`) |
 
 Cơ chế hoạt động: extension mô phỏng đúng thao tác tay (nhập code vào ô, bấm nút Đổi) trên trang đổi code, đồng thời đọc phản hồi của chính trang đó để phân loại kết quả — không can thiệp gì khác vào tài khoản của bạn.
 
@@ -191,6 +212,7 @@ Cơ chế hoạt động: extension mô phỏng đúng thao tác tay (nhập cod
 | `icons/` | Icon các kích thước |
 
 ## 📝 Cập nhật
+- **v1.4.1** — Sửa lỗi thống kê sai khi bật "Bỏ qua code đã thử"; giữ đúng trạng thái "Lỗi tạm thời" khi hết số lần thử lại; bổ sung hướng dẫn cài trên điện thoại
 - **v1.4** — Tối ưu để sử dụng panel trên điện thoại
 - **v1.3.1** — Thêm nguồn dự phòng jsDelivr; giới hạn nhật ký 200 dòng; bỏ quyền `alarms` dư thừa; khai báo yêu cầu Chrome ≥ 111
 - **v1.3** — Sửa lỗi nút tải code khi panel khởi tạo chậm; hết kẹt nút DỪNG nếu chạy lỗi giữa chừng; luôn trả lại hook fetch/XHR cho trang; thêm COPY/CSV trong Tổng kết

@@ -760,7 +760,7 @@
     const success = currentResults.filter(r => r.status === "SUCCESS").length;
     const used = currentResults.filter(r => r.status === "LIMIT_REACHED" || r.status === "USED").length;
     const failed = currentResults.filter(r => r.status === "EXPIRED" || r.status === "INVALID" || r.status === "PRESENT_ERROR").length;
-    const other = currentResults.filter(r => r.status === "TEMP_ERROR" || r.status === "NO_RESPONSE" || r.status === "VERIFY" || r.status === "OTHER").length;
+    const other = currentResults.filter(r => r.status === "TEMP_ERROR" || r.status === "NO_RESPONSE" || r.status === "VERIFY" || r.status === "OTHER" || r.status === "SKIPPED").length;
     const remaining = totalCodesCount - total;
     const nums = { ok: success, used, fail: failed, remain: remaining };
     for (const k of Object.keys(nums)) {
@@ -1008,6 +1008,9 @@
         RUN_CODES = CODES.filter(c => !hist[c]);
         console.log(`⏭ Bỏ qua ${tried.length} code đã thử trước đó: ${tried.map(c => `${c} (${hist[c].s})`).join(", ")}`);
         skippedRows = tried.map(c => ({ code: c, status: "SKIPPED", note: `đã thử lần trước: ${hist[c].s}` }));
+        // Nạp vào thống kê để ô "CÒN LẠI" và thanh tỉ lệ tính đúng
+        currentResults.push(...skippedRows);
+        updateStatsBox();
       }
     }
     if (!RUN_CODES.length) {
@@ -1107,6 +1110,7 @@
     };
 
     const redeemOne = async (code, index, total) => {
+      let lastMsg = "";
       for (let attempt = 1; attempt <= CONFIG.maxRetries + 1; attempt++) {
         await clearOldMessage();
         const inp = findInput(), btn = findButton();
@@ -1152,6 +1156,7 @@
         if (msg.text) setCurSub("✅ Đang xác nhận...", "ng-sub-ok");
 
         let status = classify(msg.text);
+        lastMsg = msg.text || "";
         if (status === "SUCCESS" && msg.source !== "response") { status = "NO_RESPONSE"; msg.text = "(popup thành công nhưng chưa bắt được phản hồi mạng)"; }
         closeDialog();
         if (activeAttempt?.id === attemptMeta.id) activeAttempt = null;
@@ -1163,8 +1168,10 @@
         }
         if (attempt <= CONFIG.maxRetries) await sleep(CONFIG.retryDelayMs);
       }
-      setCurSub(`✘ ${STATUS_LABELS.NO_RESPONSE}`, "ng-sub-bad");
-      return { stt: `${index}/${total}`, code, status: "NO_RESPONSE", message: "(không thấy phản hồi)" };
+      // Hết số lần thử lại: giữ đúng trạng thái lỗi tạm thời thay vì ghi thành "không thấy phản hồi"
+      const finalStatus = ["TEMP_ERROR"].includes(classify(lastMsg)) ? "TEMP_ERROR" : "NO_RESPONSE";
+      setCurSub(`✘ ${STATUS_LABELS[finalStatus]}`, "ng-sub-bad");
+      return { stt: `${index}/${total}`, code, status: finalStatus, message: lastMsg || "(không thấy phản hồi)" };
     };
 
     const waitCountdown = async (ms, done, total) => {
