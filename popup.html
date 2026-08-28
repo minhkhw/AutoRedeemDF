@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  button { font-family: Tahoma, "Segoe UI", Arial, sans-serif; }
   body {
     width: 320px;
     padding: 10px 10px 4px;
@@ -174,7 +175,27 @@
 
   .ft { text-align: center; font-size: 10.5px; color: #5c7389; padding: 9px 0 7px; animation: fadeUp 0.35s 0.24s ease both; }
   .ft b { color: #00ffc8; }
-  .heart { color: #ff5f70; display: inline-block; animation: beat 1.4s infinite; }
+  .ft a { color: inherit; text-decoration: none; transition: 0.2s; }
+  .ft a:hover b { text-decoration: underline; filter: brightness(1.2); }
+  .credit-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #131f2e;
+    border: 1px solid #24374b;
+    border-radius: 99px;
+    padding: 5px 14px;
+    color: #5c7389; font-size: 10.5px; letter-spacing: 0.3px;
+  }
+  .heart {
+    display: inline-flex; align-items: center; justify-content: center;
+    flex: none;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: rgba(255, 95, 112, 0.13);
+    border: 1px solid rgba(255, 95, 112, 0.4);
+    box-shadow: 0 0 9px -3px rgba(255, 95, 112, 0.65);
+    color: #ff5f70; font-size: 11px;
+    animation: beat 1.4s infinite;
+  }
 
   @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
   @keyframes spin { to { transform: rotate(360deg); } }
@@ -239,7 +260,7 @@
     </a>
   </div>
 
-  <div class="ft">Được phát triển bởi <b>Minh Khương</b> <span class="heart">❤</span></div>
+  <div class="ft"><span class="credit-pill">Được phát triển bởi <a href="https://www.facebook.com/MinhKhw" target="_blank" rel="noopener noreferrer" title="Facebook Minh Khương"><b>Minh Khương</b></a><span class="heart">❤</span></span></div>
   <script src="popup.js"></script>
 </body>
 </html>

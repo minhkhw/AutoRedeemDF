@@ -35,7 +35,6 @@
       btn.style.color = "#00ffc8";
       btn.style.opacity = "1";
       try {
-        // Bước 1: fetch JSON nguồn
         const res1 = await new Promise((resolve) => {
           chrome.runtime.sendMessage({ action: "fetchJson" }, (r) => {
             if (chrome.runtime.lastError) resolve({ ok: false, err: chrome.runtime.lastError.message });
@@ -54,7 +53,6 @@
         }
         if (!url) throw new Error("Không tìm thấy URL code trong nguồn");
 
-        // Bước 2: fetch raw code từ URL
         const res2 = await new Promise((resolve) => {
           chrome.runtime.sendMessage({ action: "fetchUrl", url }, (r) => {
             if (chrome.runtime.lastError) resolve({ ok: false, err: chrome.runtime.lastError.message });

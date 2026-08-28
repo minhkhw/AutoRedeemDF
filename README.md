@@ -4,7 +4,7 @@
 
 **Giao diện tự động đổi gift code Delta Force trên trang đổi code Garena**
 
-![Version](https://img.shields.io/badge/version-1.4.1-00e8bd)
+![Version](https://img.shields.io/badge/version-1.4.3-00e8bd)
 ![License](https://img.shields.io/badge/license-MIT-00a4d2)
 ![Chrome](https://img.shields.io/badge/Chrome-%E2%89%A5111-ffc400)
 
@@ -24,6 +24,8 @@ Extension chèn một panel điều khiển ngay trên trang [redeem.df.garena.s
 
 - ⚡ **Đổi hàng loạt** — dán danh sách code (mỗi code một dòng), tự động loại trùng
 - 📊 **Thống kê trực tiếp** — 4 ô THÀNH CÔNG / ĐÃ DÙNG / LỖI / CÒN LẠI + thanh tỉ lệ cập nhật real-time
+- ⏳ **Đồng hồ ETA** — ước lượng thời gian còn lại của đợt chạy ngay trên card đang chạy, đếm giảm mượt theo tốc độ thực tế (tự trừ cả thời gian nghỉ giữa code và backoff rate-limit)
+- 📶 **Thanh tiến độ đợt chạy** — `X/N · %` ngay dưới header (nhìn thấy cả khi thu gọn panel), tự chuyển màu vàng cảnh báo khi bị giới hạn tốc độ
 - 📋 **Tổng kết chi tiết** — bảng kết quả lọc theo trạng thái, kèm **COPY ra clipboard** và **xuất CSV** (mở được bằng Excel)
 - ⚙️ **3 chế độ tốc độ** — 🛡 AN TOÀN · ⚖ CÂN BẰNG · ⚡ THẦN TỐC, hoặc tinh chỉnh từng thông số
 - ⏭ **Bỏ qua code đã thử** — nhớ lịch sử (tối đa 500 code) ở lần chạy sau
@@ -212,6 +214,7 @@ Cơ chế hoạt động: extension mô phỏng đúng thao tác tay (nhập cod
 | `icons/` | Icon các kích thước |
 
 ## 📝 Cập nhật
+- **v1.4.3** — Thêm đồng hồ ETA (pill riêng, đếm giảm mượt theo tốc độ thực tế); thêm thanh tiến độ tổng thể của đợt; nút DỪNG có icon vuông riêng; làm mới toàn bộ icon panel theo phong cách tactical Delta Force; tách hàng riêng cho timer + ETA dưới code đang chạy; popup gọn nhẹ hơn nhờ dùng chung tải nguồn & kiểm tra cập nhật qua background
 - **v1.4.1** — Sửa lỗi thống kê sai khi bật "Bỏ qua code đã thử"; giữ đúng trạng thái "Lỗi tạm thời" khi hết số lần thử lại; bổ sung hướng dẫn cài trên điện thoại
 - **v1.4** — Tối ưu để sử dụng panel trên điện thoại
 - **v1.3.1** — Thêm nguồn dự phòng jsDelivr; giới hạn nhật ký 200 dòng; bỏ quyền `alarms` dư thừa; khai báo yêu cầu Chrome ≥ 111

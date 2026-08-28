@@ -1,18 +1,19 @@
 (function() {
   // ===== 1. TẠO GIAO DIỆN NGƯỜI DÙNG (UI) =====
   const ICONS = {
-    delta: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="miter"><path d="M12 3.5 20.5 20h-17Z"/><path d="M12 12.5V16M10.25 14.25h3.5" stroke-linecap="round"/></svg>`,
-    crosshair: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="6.5"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"/><circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none"/></svg>`,
-    ticket: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 9a2 2 0 0 0 0 6v3h18v-3a2 2 0 0 1 0-6V6H3Z"/><path d="M15 8.5v7" stroke-dasharray="2.4 2.6" stroke-linecap="round"/></svg>`,
-    clipboard: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>`,
-    cloudDL: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a6 6 0 0 0-5.8 4.6A4.5 4.5 0 0 0 5.5 15H7m10 0h1.5A4.5 4.5 0 0 0 18 6.6 6 6 0 0 0 12 2Z"/><path d="M12 18v4m0-4-3 3m3-3 3 3"/></svg>`,
+    delta: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="miter"><path d="M12 3.5 20.5 20h-17Z"/><path d="m12 11.2 3.8 6.8H8.2Z" fill="currentColor" stroke="none"/></svg>`,
+    crosshair: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M4 8.5v-3A1.5 1.5 0 0 1 5.5 4h3M15.5 4h3A1.5 1.5 0 0 1 20 5.5v3M20 15.5v3a1.5 1.5 0 0 1-1.5 1.5h-3M8.5 20h-3A1.5 1.5 0 0 1 4 18.5v-3"/><path d="M12 7.2v2.7M12 14.1v2.7M7.2 12h2.7M14.1 12h2.7"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg>`,
+    stop: `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><rect x="6.5" y="6.5" width="11" height="11" rx="1.5"/></svg>`,
+    ticket: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="7.5" cy="16.5" r="3.5"/><path d="M10 14 20 4M15.5 8.5 18 11M12.2 11.8l2 2"/></svg>`,
+    clipboard: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M15.5 4H18a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2.5"/><rect x="8.5" y="2.5" width="7" height="3.5" rx="1"/><path d="M8.5 13.5h7M8.5 17h4.5"/></svg>`,
+    cloudDL: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M12 2a6 6 0 0 0-5.8 4.6A4.5 4.5 0 0 0 5.5 15H7m10 0h1.5A4.5 4.5 0 0 0 18 6.6 6 6 0 0 0 12 2Z"/><path d="M12 12v8m-3.5-3.5L12 20l3.5-3.5"/></svg>`,
     trash: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M10 11v6M14 11v6"/></svg>`,
     stopwatch: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2h5"/><path d="M12 2v3"/><circle cx="12" cy="13.5" r="7.5"/><path d="M12 9.5v4l2.5 2"/></svg>`,
     terminal: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="1.5"/><path d="m7 9.5 3 2.5-3 2.5M12.5 14.5H17"/></svg>`,
-    gear: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.01a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`,
-    table: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="15" rx="1.5"/><path d="M3.5 9.5h17M9.5 9.5v10"/></svg>`,
+    gear: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M3.5 7.5h8M16.4 7.5h4.1M3.5 16.5h3.9M12.6 16.5h7.9"/><circle cx="14" cy="7.5" r="2.3"/><circle cx="10" cy="16.5" r="2.3"/></svg>`,
+    table: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><rect x="3.5" y="4.5" width="17" height="15" rx="1.5"/><path d="M3.5 9.5h17M9.5 9.5v10"/><path d="m12.3 14.6 1.9 1.9 3.4-3.8"/></svg>`,
     close: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>`,
-    retry: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>`,
+    retry: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M22.5 4.5V10H17"/><path d="M19.99 14.5a8.5 8.5 0 1 1-2-8.94l4.51 4.44"/></svg>`,
     chevDown: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 9 7 7 7-7"/></svg>`,
     chevUp: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 15 7-7 7 7"/></svg>`
   };
@@ -21,7 +22,8 @@
   panel.id = "redeem-ui";
   panel.innerHTML = `
     <div id="ng-header">
-      <span id="ng-title">${ICONS.delta}<span>AUTO REDEEM</span></span>
+      <span id="ng-title"><span id="ng-logo">${ICONS.delta}</span><span id="ng-ttl"><span class="ng-ttl-sub">DELTA FORCE</span><span class="ng-ttl-main">AUTO REDEEM</span></span></span>
+      <span id="ng-ready-badge" class="ng-badge" title="Extension đang hoạt động trên *.garena.sg"><i class="ng-badge-dot"></i><span>SẴN SÀNG</span></span>
       <div id="ng-header-actions">
         <button id="ng-settings-btn" title="Cài đặt tốc độ">${ICONS.gear}</button>
         <button id="ng-minimize" title="Thu gọn / Mở rộng">${ICONS.chevDown}</button>
@@ -32,12 +34,17 @@
       <span>Có bản mới <b id="ng-upd-ver"></b> — bấm để tải</span>
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
     </div>
+    <div id="ng-progress">
+      <span id="ng-progress-label">TIẾN ĐỘ</span>
+      <span id="ng-progress-text">0/0 · 0%</span>
+      <div id="ng-progress-bar"><i id="ng-progress-fill"></i></div>
+    </div>
     <div id="ng-body">
       <div class="ng-field-label">${ICONS.ticket}<span>MÃ GIFT CODE</span><button id="ng-remote-btn" class="ng-mini-btn" title="Tải code từ nguồn và dán vào ô">${ICONS.cloudDL}</button><button id="ng-paste-btn" class="ng-mini-btn" title="Dán danh sách code từ clipboard">${ICONS.clipboard}</button></div>
       <textarea id="ng-code-input" placeholder="Dán danh sách code vào đây, mỗi code một dòng..."></textarea>
       <div id="ng-code-stats"></div>
       <div class="ng-btn-row">
-        <button id="ng-start-btn">${ICONS.crosshair}<span id="ng-start-text">BẮT ĐẦU</span></button>
+        <button id="ng-start-btn"><span id="ng-start-ico">${ICONS.crosshair}</span><span id="ng-start-text">BẮT ĐẦU</span></button>
         <button id="ng-retry-btn" disabled title="Chạy lại code lỗi / chưa chạy xong khi dừng">${ICONS.retry}<span id="ng-retry-text">CHẠY LẠI</span></button>
         <button id="ng-summary-btn" disabled title="Xem kết quả tổng kết">${ICONS.table}<span>TỔNG KẾT</span></button>
       </div>
@@ -45,7 +52,10 @@
         <div class="ng-cur-row1">
           <span class="ng-cur-ico">${ICONS.stopwatch}</span>
           <span id="ng-cur-code">·····</span>
+        </div>
+        <div id="ng-cur-row2">
           <span id="ng-cur-timer"></span>
+          <span id="ng-cur-eta"></span>
         </div>
         <div id="ng-cur-sub">Sẵn sàng...</div>
         <div id="ng-cur-cd"><div id="ng-cur-cd-fill"></div></div>
@@ -63,11 +73,10 @@
         <div class="ng-log-title">${ICONS.terminal}<span>Nhật ký hoạt động</span><button id="ng-clear-log-btn" class="ng-mini-btn" title="Xoá nhật ký">${ICONS.trash}</button></div>
         <div id="ng-log-box"></div>
       </div>
-      <div id="ng-credit">Được phát triển bởi <b>Minh Khương</b> <span class="heart">❤</span></div>
+      <div id="ng-credit">Được phát triển bởi <a class="ng-credit-link" href="https://www.facebook.com/MinhKhw" target="_blank" rel="noopener noreferrer" title="Facebook Minh Khương"><b>Minh Khương</b></a><span class="heart">❤</span></div>
     </div>
   `;
 
-  // CSS
   const style = document.createElement("style");
   style.innerHTML = `
     #redeem-ui {
@@ -89,31 +98,45 @@
     }
     #ng-header {
       flex-shrink: 0;
+      margin: 10px 10px 0;
       background: linear-gradient(135deg, #00e8bd, #00c4a1 55%, #00a4d2);
       color: #01241d;
-      padding: 10px 14px;
-      font-weight: bold;
+      padding: 10px 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       cursor: move;
       gap: 8px;
-      letter-spacing: 0.5px;
-      border-radius: 16px 16px 0 0;
+      border-radius: 14px;
+      box-shadow: 0 6px 18px -6px rgba(0, 220, 180, 0.45);
     }
-    #ng-title { display: flex; align-items: center; gap: 8px; }
-    #ng-title span { font-size: 15px; font-weight: 800; letter-spacing: 0.8px; }
-    #ng-title svg { background: rgba(2,28,23,0.22); padding: 5px; border-radius: 9px; }
+    #ng-title { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    #ng-logo { width: 34px; height: 34px; flex: none; border-radius: 10px; background: rgba(0, 22, 18, 0.22); display: flex; align-items: center; justify-content: center; }
+    #ng-logo svg { display: block; }
+    #ng-ttl { display: flex; flex-direction: column; line-height: 1.18; min-width: 0; }
+    .ng-ttl-sub { font-size: 9px; font-weight: 800; letter-spacing: 2.2px; color: rgba(0, 44, 36, 0.72); }
+    .ng-ttl-main { font-size: 15px; font-weight: 800; letter-spacing: 0.8px; color: #01241d; white-space: nowrap; }
+    .ng-badge {
+      margin-left: auto; flex: none;
+      display: flex; align-items: center; gap: 5px;
+      font-size: 9px; font-weight: 800; letter-spacing: 0.4px;
+      padding: 4px 9px; border-radius: 99px;
+      background: rgba(2, 28, 23, 0.32); color: #f2fffc;
+    }
+    .ng-badge .ng-badge-dot { width: 6px; height: 6px; border-radius: 50%; flex: none; background: #54ffd5; animation: ng-pulse-g 1.5s infinite; }
+    @keyframes ng-pulse-g { 0% { box-shadow: 0 0 0 0 rgba(84, 255, 213, 0.55); } 70% { box-shadow: 0 0 0 5px rgba(84, 255, 213, 0); } 100% { box-shadow: 0 0 0 0 rgba(84, 255, 213, 0); } }
     #ng-update-banner {
       flex-shrink: 0;
       display: flex; align-items: center; gap: 8px;
-      padding: 7px 12px;
-      background: linear-gradient(90deg, rgba(255,179,0,0.14), rgba(255,140,0,0.05));
-      border-bottom: 1px solid rgba(255,186,0,0.4);
+      margin: 10px 10px 0;
+      padding: 8px 11px;
+      background: linear-gradient(135deg, rgba(255,179,0,0.14), rgba(255,140,0,0.06));
+      border: 1px solid rgba(255,186,0,0.5);
+      border-radius: 11px;
       color: #ffcf7d; font-size: 12px; font-weight: 700;
-      cursor: pointer; transition: 0.2s; letter-spacing: 0.2px;
+      cursor: pointer; transition: 0.2s;
     }
-    #ng-update-banner:hover { background: linear-gradient(90deg, rgba(255,179,0,0.24), rgba(255,140,0,0.1)); }
+    #ng-update-banner:hover { border-color: rgba(255,186,0,0.85); background: linear-gradient(135deg, rgba(255,179,0,0.22), rgba(255,140,0,0.1)); }
     #ng-update-banner b { color: #ffe3ad; }
     #ng-update-banner .ng-upd-ico {
       flex: none; width: 20px; height: 20px; border-radius: 7px;
@@ -122,6 +145,15 @@
     }
     #ng-update-banner svg { margin-left: auto; flex: none; opacity: 0.75; transition: transform 0.2s; }
     #ng-update-banner:hover svg { transform: translateX(2px); opacity: 1; }
+    #ng-progress { flex-shrink: 0; display: none; align-items: center; gap: 8px; margin: 10px 10px 0; padding: 6px 10px; background: #0a121d; border: 1px solid #1d2f44; border-radius: 10px; }
+    #ng-progress.ng-pg-on { display: flex; }
+    #ng-progress.ng-pg-slow { border-color: rgba(255,196,0,0.5); }
+    #ng-progress-label { flex: none; font-size: 9px; font-weight: 800; letter-spacing: 1.2px; color: #7d95ac; }
+    #ng-progress-text { flex: none; font-family: Consolas, "Courier New", monospace; font-size: 11px; font-weight: bold; color: #00ffc8; min-width: 74px; text-align: right; }
+    #ng-progress.ng-pg-slow #ng-progress-text { color: #ffc400; }
+    #ng-progress-bar { flex: 1 1 auto; height: 6px; border-radius: 99px; background: #101b29; border: 1px solid #1d2f44; overflow: hidden; }
+    #ng-progress-fill { display: block; height: 100%; width: 0%; border-radius: 99px; background: linear-gradient(90deg, #00ffc8, #00c8ff); transition: width 0.3s ease; }
+    #ng-progress.ng-pg-slow #ng-progress-fill { background: linear-gradient(90deg, #ffc400, #ff8c00); }
     #ng-title svg, #ng-minimize svg, #ng-start-btn svg, #ng-retry-btn svg, #ng-summary-btn svg, #ng-settings-btn svg, .ng-field-label svg, .ng-log-title svg, #ng-sum-header svg, #ng-sum-close svg, #ng-set-header svg, #ng-set-close svg { display: block; flex: none; }
     #ng-header-actions { display: flex; align-items: center; gap: 4px; }
     #ng-settings-btn, #ng-minimize { background: rgba(2, 28, 23, 0.22); border: none; color: #01241d; width: 30px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; border-radius: 8px; transition: 0.2s; }
@@ -156,10 +188,21 @@
     #ng-stat-ratio .rs-used { background: #ffc400; }
     #ng-stat-ratio .rs-fail { background: #ff6b78; }
     #ng-stat-ratio .rs-other { background: #b388ff; }
-	.heart { color: #ff5f70; display: inline-block; animation: beat 1.4s infinite; }
+    .heart {
+      display: inline-flex; align-items: center; justify-content: center;
+      flex: none;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: rgba(255, 95, 112, 0.13);
+      border: 1px solid rgba(255, 95, 112, 0.4);
+      box-shadow: 0 0 9px -3px rgba(255, 95, 112, 0.65);
+      color: #ff5f70; font-size: 11px;
+      animation: beat 1.4s infinite;
+    }
+    @keyframes beat { 0%, 40%, 80%, 100% { transform: scale(1); } 20%, 60% { transform: scale(1.22); } }
     #ng-body {
       flex: 1 1 auto;
-      padding: 14px;
+      padding: 12px 12px 4px;
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -195,10 +238,11 @@
     #ng-code-stats .ng-st-ok { color: #3dffb8; border-color: rgba(0,255,200,0.35); }
     #ng-code-stats .ng-st-warn { color: #ffc400; border-color: rgba(255,196,0,0.35); }
     #ng-code-stats .ng-st-bad { color: #ff6b78; border-color: rgba(255,82,82,0.35); }
-    #ng-start-btn { position: relative; overflow: hidden; grid-column: 1 / -1; background: linear-gradient(135deg, #19ffbf, #00c8e8); color: #01241d; border: none; padding: 11px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap; box-shadow: 0 6px 16px -6px rgba(0,230,190,0.5); font-size: 14px; }
+    #ng-start-btn { position: relative; overflow: hidden; grid-column: 1 / -1; background: linear-gradient(135deg, #19ffbf, #00c8e8); color: #01241d; border: none; padding: 11px; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap; box-shadow: 0 6px 16px -6px rgba(0,230,190,0.5); font-size: 13px; letter-spacing: 0.4px; }
     #ng-start-btn::after { content: ""; position: absolute; top: 0; left: -60%; width: 40%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent); transform: skewX(-20deg); animation: ng-shine 3.2s infinite; }
     @keyframes ng-shine { 0% { left: -60%; } 55%, 100% { left: 135%; } }
-    #ng-start-btn.ng-running svg { animation: ng-scan 1.1s linear infinite; }
+    #ng-start-btn.ng-running:not(.ng-stop-mode) svg { animation: ng-scan 1.1s linear infinite; }
+    #ng-start-ico { display: inline-flex; }
     @keyframes ng-scan { to { transform: rotate(360deg); } }
     #ng-start-btn:hover { filter: brightness(1.06); box-shadow: 0 9px 20px -6px rgba(0,230,190,0.6); }
     #ng-start-btn.ng-stop-mode { background: linear-gradient(135deg, #ff6b78, #ff4757); color: #fff; box-shadow: 0 6px 16px -6px rgba(255,82,82,0.5); }
@@ -222,6 +266,11 @@
     #ng-cur-card.ng-cur-live #ng-cur-code { color: #fff; text-shadow: 0 0 12px rgba(0,255,200,0.45); }
     #ng-cur-timer { flex: none; font-family: Consolas, "Courier New", monospace; font-size: 11.5px; font-weight: bold; color: #ffc400; background: rgba(255,196,0,0.08); border: 1px solid rgba(255,196,0,0.35); padding: 2px 8px; border-radius: 99px; }
     #ng-cur-timer:empty { display: none; }
+    #ng-cur-row2 { display: none; align-items: center; gap: 8px; }
+    #ng-cur-row2:has(span:not(:empty)) { display: flex; }
+    #ng-cur-row2 #ng-cur-eta { margin-left: auto; }
+    #ng-cur-eta { flex: none; font-family: Consolas, "Courier New", monospace; font-size: 11.5px; font-weight: bold; color: #b388ff; background: rgba(179,136,255,0.08); border: 1px solid rgba(179,136,255,0.35); padding: 2px 8px; border-radius: 99px; white-space: nowrap; }
+    #ng-cur-eta:empty { display: none; }
     #ng-cur-timer.ng-cur-low { color: #ff6b78; background: rgba(255,82,82,0.1); border-color: rgba(255,82,82,0.55); animation: ng-cur-blink 0.5s steps(2) infinite; }
     @keyframes ng-cur-blink { 50% { opacity: 0.55; } }
     #ng-cur-sub { font-size: 12px; font-weight: bold; color: #8fa8bf; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -251,15 +300,21 @@
     #ng-log-box:focus-within { border-color: rgba(0,255,200,0.3); }
     #ng-credit {
       flex-shrink: 0;
-      text-align: center;
-      font-size: 10px;
+      align-self: center;
+      display: inline-flex; align-items: center; gap: 6px;
+      width: fit-content;
+      background: #131f2e;
+      border: 1px solid #24374b;
+      border-radius: 99px;
+      padding: 5px 14px;
+      margin: 2px 0 6px;
+      font-size: 10.5px;
       color: #5c7389;
       letter-spacing: 0.3px;
-      padding: 8px 0 12px;
-      border-top: 1px solid #182534;
-      background: #0c1420;
     }
-    #ng-credit b { color: #00ffc8; font-weight: normal; }
+    #ng-credit b { color: #00ffc8; }
+    .ng-credit-link { color: inherit; text-decoration: none; transition: 0.2s; }
+    .ng-credit-link:hover b { text-decoration: underline; filter: brightness(1.2); }
     .log-line { margin-bottom: 2px; word-wrap: break-word; white-space: pre-wrap; }
     .log-time { color: #5c7389; margin-right: 6px; font-size: 11px; }
     .log-ok { color: #00e676; }
@@ -324,7 +379,7 @@
     /* ===== ĐIỆN THOẠI / MÀN HẸP (extension trên Kiwi, Lemur, Edge Canary...) ===== */
     #ng-header { touch-action: none; -webkit-user-select: none; user-select: none; }
     #redeem-ui, #ng-sum-card, #ng-set-card, #ng-summary-modal, #ng-settings-modal { box-sizing: border-box; }
-    #redeem-ui button, #ng-sum-card button, #ng-set-card button { touch-action: manipulation; }
+    #redeem-ui button, #ng-sum-card button, #ng-set-card button { touch-action: manipulation; font-family: Tahoma, "Segoe UI", Arial, sans-serif; }
     html.ng-df-mobile #redeem-ui {
       right: 8px; left: auto;
       bottom: calc(8px + var(--ng-kb, 0px));
@@ -332,10 +387,14 @@
       max-height: 86vh; max-height: 86dvh;
       border-radius: 14px;
     }
-    html.ng-df-mobile #ng-header { border-radius: 14px 14px 0 0; padding: 8px 10px; }
+    html.ng-df-mobile #ng-header { margin: 8px 8px 0; padding: 8px 10px; gap: 6px; }
+    html.ng-df-mobile .ng-ttl-sub { letter-spacing: 1.6px; }
     html.ng-df-mobile #ng-settings-btn, html.ng-df-mobile #ng-minimize { width: 36px; height: 32px; }
     html.ng-df-mobile .ng-mini-btn { width: 34px; height: 30px; }
     html.ng-df-mobile #ng-body { padding: 10px 10px 4px; gap: 8px; }
+    html.ng-df-mobile #ng-progress { margin: 8px 8px 0; gap: 6px; }
+    html.ng-df-mobile #ng-progress-label { display: none; }
+    html.ng-df-mobile #ng-progress-text { min-width: 0; }
     html.ng-df-mobile #ng-code-input { font-size: 16px; min-height: 58px; max-height: 96px; }
     html.ng-df-mobile .ng-set-input { font-size: 16px; }
     html.ng-df-mobile #ng-start-btn { padding: 13px 8px; }
@@ -420,6 +479,7 @@
           </table>
         </div>
         <div id="ng-sum-footer">
+          <span>✔ Thành công: <b>${okN}/${lastSummary.length}</b></span>
           <span>⏱ Thời gian: <b>${fmtDur(sessionStats.totalMs)}</b></span>
           <span>⚡ Tốc độ: <b>${avgSec}s/code</b></span>
           <span id="ng-sum-actions">
@@ -650,6 +710,7 @@
   const curCard = document.getElementById("ng-cur-card");
   const curCodeEl = document.getElementById("ng-cur-code");
   const curTimerEl = document.getElementById("ng-cur-timer");
+  const curEtaEl = document.getElementById("ng-cur-eta");
   const curSubEl = document.getElementById("ng-cur-sub");
   const curCdFill = document.getElementById("ng-cur-cd-fill");
   const setCurSub = (text, cls = "") => { curSubEl.textContent = text; curSubEl.className = cls; };
@@ -670,6 +731,7 @@
   const resetCurCard = (subText = "Sẵn sàng...", cls = "") => {
     curCard.classList.remove("ng-cur-live");
     curCodeEl.textContent = "·····";
+    curEtaEl.textContent = "";
     setCurSub(subText, cls);
     clearCurCountdown();
   };
@@ -735,11 +797,13 @@
   console.warn = (...args) => { originalConsoleWarn(...args); let m = formatArgs(args); if (isOwnLog(m)) appendLog("⚠️ " + m, "warn"); };
   console.error = (...args) => { originalConsoleError(...args); let m = formatArgs(args); if (isOwnLog(m)) appendLog("❌ " + m, "bad"); };
 
-  console.table = (data) => originalConsoleTable(data); 
+  console.table = (...args) => originalConsoleTable(...args);
 
   // ===== 3. CORE SCRIPT CHẠY ĐỔI CODE =====
   const startBtn = document.getElementById("ng-start-btn");
   const startBtnText = document.getElementById("ng-start-text");
+  const startBtnIco = document.getElementById("ng-start-ico");
+  const setStartIco = name => { if (startBtnIco) startBtnIco.innerHTML = ICONS[name]; };
   const retryBtn = document.getElementById("ng-retry-btn");
   const retryBtnText = document.getElementById("ng-retry-text");
   let isRunning = false;
@@ -752,6 +816,20 @@
   let currentResults = [];
   let totalCodesCount = 0;
   let lastStatNums = { ok: 0, used: 0, fail: 0, remain: 0 };
+
+  // Thanh tiến độ tổng thể của đợt (nằm ngoài #ng-body nên nhìn thấy cả khi panel thu gọn)
+  const progressBarEl = document.getElementById("ng-progress");
+  const progressTextEl = document.getElementById("ng-progress-text");
+  const progressFillEl = document.getElementById("ng-progress-fill");
+  let batchBackoff = false;
+  const updateProgressBar = () => {
+    if (!progressBarEl || !progressBarEl.classList.contains("ng-pg-on")) return;
+    const done = currentResults.length;
+    const pct = totalCodesCount ? Math.min(100, Math.round((done / totalCodesCount) * 100)) : 0;
+    if (progressTextEl) progressTextEl.textContent = `${done}/${totalCodesCount} · ${pct}%`;
+    if (progressFillEl) progressFillEl.style.width = pct + "%";
+    progressBarEl.classList.toggle("ng-pg-slow", batchBackoff);
+  };
 
   function updateStatsBox() {
     const box = document.getElementById("ng-stats-box");
@@ -781,6 +859,7 @@
       const seg = box.querySelector(`#ng-stat-ratio .rs-${k}`);
       if (seg) seg.style.width = ((segs[k] / base) * 100).toFixed(2) + "%";
     }
+    updateProgressBar();
   }
 
   const updateRetryBtn = () => {
@@ -881,6 +960,7 @@
     isRunning = true;
     stopRequested = false;
     startBtn.classList.add("ng-running", "ng-stop-mode");
+    setStartIco("stop");
     startBtnText.innerText = "DỪNG";
     logBox.innerHTML = "";
     if (document.hidden) appendLog("🔊 Phát âm thanh gần câm — giữ tốc độ khi tab ở nền", "info");
@@ -891,9 +971,12 @@
     summaryBtn.disabled = true;
     updateRetryBtn();
 
-    // Reset stats
     currentResults = [];
     totalCodesCount = codeList.length;
+    batchBackoff = false;
+    progressBarEl.classList.add("ng-pg-on");
+    progressBarEl.classList.remove("ng-pg-slow");
+    if (progressFillEl) progressFillEl.style.width = "0%";
     updateStatsBox();
 
     let outcome = null;
@@ -919,6 +1002,7 @@
     isRunning = false;
     stopRequested = false;
     startBtn.classList.remove("ng-running", "ng-stop-mode");
+    setStartIco("crosshair");
     startBtnText.innerText = "BẮT ĐẦU LẠI";
     summaryBtn.disabled = !lastSummary.length;
     updateRetryBtn();
@@ -927,8 +1011,8 @@
     if (outcome) resetCurCard(stopped ? "⏹ Đã dừng theo yêu cầu" : "✔ Hoàn tất!", stopped ? "ng-sub-warn" : "ng-sub-ok");
     else resetCurCard(runError ? `❌ Lỗi: ${runError}` : "❌ Lỗi: chưa thấy ô nhập/nút Đổi!", "ng-sub-bad");
     appendLog("=== HOÀN TẤT QUÁ TRÌNH ===", "title");
-    // Cập nhật stats box lần cuối
     updateStatsBox();
+    progressBarEl.classList.remove("ng-pg-on", "ng-pg-slow");
     if (outcome && userConfig.notifyOnDone) {
       const okN = lastSummary.filter(r => r.status === "SUCCESS").length;
       notifyDone(stopped ? `⏹ ĐÃ DỪNG ${okN}/${lastSummary.length} CODE` : `✔ ${okN}/${lastSummary.length} CODE THÀNH CÔNG`);
@@ -936,7 +1020,6 @@
     stopKeepAlive();
   }
 
-  // Thống kê danh sách code theo thời gian thực 
   const codeInput = document.getElementById("ng-code-input");
   const codeStats = document.getElementById("ng-code-stats");
   const updateCodeStats = () => {
@@ -954,7 +1037,6 @@
   codeInput.addEventListener("input", updateCodeStats);
   updateCodeStats();
 
-  // Nút dán nhanh từ clipboard
   document.getElementById("ng-paste-btn").onclick = async () => {
     try {
       const text = (await navigator.clipboard.readText() || "").trim();
@@ -997,8 +1079,6 @@
   async function startRedeemProcess(rawText) {
     const CODES = rawText.split(/\n+/).map(x => x.trim()).filter(Boolean);
     const CONFIG = { ...userConfig };
-
-    // Lọc code đã thử theo lịch sử
     let RUN_CODES = CODES;
     let skippedRows = [];
     if (CONFIG.skipTriedCodes) {
@@ -1019,6 +1099,19 @@
     }
     
     const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+    // ETA = chu kỳ trung bình (EMA: xử lý + nghỉ sau code, gồm cả backoff) × số code còn lại
+    // − phần đang trôi của chu kỳ hiện tại → đồng hồ đếm giảm liên tục thay vì tăng rồi rơi khi hoàn tất code
+    let cycleStartTs = 0, emaCycleMs = 0;
+    const fmtEta = ms => { const s = Math.round(ms / 1000), m = Math.floor(s / 60); return m ? `${m}p${String(s % 60).padStart(2, "0")}s` : `${Math.max(1, s)}s`; };
+    const setCurEta = txt => { curEtaEl.textContent = txt ? `⏳ còn ~${txt}` : ""; };
+    const updateEta = (done, total) => {
+      if (!emaCycleMs || done >= total) { setCurEta(""); return; }
+      const remaining = (total - done) * emaCycleMs - (cycleStartTs ? Date.now() - cycleStartTs : 0);
+      if (remaining <= 0) { setCurEta(""); return; }
+      setCurEta(fmtEta(remaining < 10000 ? remaining : Math.round(remaining / 5000) * 5000));
+    };
+
     const requestStarts = [], networkResponses = [];
     const originalFetch = window.fetch ? window.fetch.bind(window) : null;
     const originalXhrOpen = window.XMLHttpRequest && XMLHttpRequest.prototype.open;
@@ -1114,7 +1207,7 @@
       for (let attempt = 1; attempt <= CONFIG.maxRetries + 1; attempt++) {
         await clearOldMessage();
         const inp = findInput(), btn = findButton();
-        if (!inp || !btn) return { stt: `${index}/${total}`, code, status: "OTHER", message: "Không tìm thấy ô nhập hoặc nút Đổi." };
+        if (!inp || !btn) { clearCurCountdown(); return { stt: `${index}/${total}`, code, status: "OTHER", message: "Không tìm thấy ô nhập hoặc nút Đổi." }; }
         
         setValue(inp, ""); await sleep(50); setValue(inp, code); await sleep(80);
         console.log(`%c[${index}/${total}] Đang chạy%c ${code}`, "", "");
@@ -1152,6 +1245,7 @@
           const elapsed = Date.now() - start;
           setCurCountdown(CONFIG.timeoutMs - elapsed, CONFIG.timeoutMs);
           setCurSub(`${requestSent ? "🔄 Đang chờ phản hồi" : "⏳ Đang gửi yêu cầu"} (${(elapsed / 1000).toFixed(1)}s)...`, "ng-sub-run");
+          updateEta(index - 1, total);
         }
         if (msg.text) setCurSub("✅ Đang xác nhận...", "ng-sub-ok");
 
@@ -1181,6 +1275,8 @@
         if (stopRequested) return;
         const left = ms - (Date.now() - t0);
         setCurSub(`⏸ Đã đổi ${done}/${total} · chuẩn bị code kế tiếp...`, "ng-sub-warn");
+        // chu kỳ đang trôi là phần delay của code vừa xong → tính theo chỉ số done-1 (0-based)
+        if (done < total) updateEta(done - 1, total);
         setCurCountdown(left, ms, "Tiếp sau:");
         await sleep(Math.min(100, left));
       }
@@ -1193,11 +1289,14 @@
       if (title) console.log(`%c${title}`, "");
       for (let i = 0; i < codes.length; i++) {
         if (stopRequested) { console.log(`⏹ ĐÃ DỪNG — đã xử lý ${i}/${total}, còn ${total - i} code chưa chạy`); break; }
+        const cycleT0 = Date.now();
+        if (cycleStartTs) emaCycleMs = emaCycleMs ? Math.round(emaCycleMs * 0.7 + (cycleT0 - cycleStartTs) * 0.3) : (cycleT0 - cycleStartTs);
+        cycleStartTs = cycleT0;
         setCurSub(`▶ Đang đổi ${i + 1}/${total}...`, "ng-sub-run");
+        updateEta(i, total);
         document.title = `▶ ${i + 1}/${total} · DF Auto Redeem`;
         const r = await redeemOne(codes[i], i + 1, total);
         results.push(r);
-        // Cập nhật stats real-time
         currentResults.push(r);
         updateStatsBox();
 
@@ -1209,13 +1308,14 @@
         } else {
           backoffMs = 0;
         }
+        batchBackoff = backoffMs > 0;
+        updateProgressBar();
         const baseGap = CONFIG.delayBetweenCodesMs > 0 ? (CONFIG.jitterDelay ? Math.round(CONFIG.delayBetweenCodesMs * (0.8 + Math.random() * 0.4)) : CONFIG.delayBetweenCodesMs) : 0;
         await waitCountdown(baseGap + backoffMs, i + 1, total);
       }
       return results;
     };
 
-    // Restore Hooks function
     const restoreHooks = () => {
       if (originalFetch) window.fetch = originalFetch;
       if (originalXhrOpen && originalXhrSend) { XMLHttpRequest.prototype.open = originalXhrOpen; XMLHttpRequest.prototype.send = originalXhrSend; }
@@ -1228,7 +1328,6 @@
     try {
       const results = await runBatch(RUN_CODES);
 
-      // Ghi lịch sử code đã có kết quả
       const hist = loadCodeHistory();
       results.forEach(r => { if (TERMINAL_STATUSES.includes(r.status)) hist[r.code] = { s: STATUS_LABELS[r.status] || r.status, t: Date.now() }; });
       saveCodeHistory(hist);

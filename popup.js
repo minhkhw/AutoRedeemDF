@@ -25,52 +25,22 @@ if (typeof chrome !== "undefined" && chrome.tabs && chrome.tabs.query) {
   setStatus(false); // chạy thử popup ngoài môi trường extension
 }
 
-// Khối NGUỒN CODE MỚI NHẤT: tải file JSON trên GitHub
-
-const CODE_SOURCES = [
-  "https://raw.githubusercontent.com/minhkhw/AutoRedeemDF/refs/heads/main/code.json",
-  "https://cdn.jsdelivr.net/gh/minhkhw/AutoRedeemDF@main/code.json"
-];
-
-const cleanText = html => html
-  .replace(/<script[\s\S]*?<\/script>/gi, " ")
-  .replace(/<style[\s\S]*?<\/style>/gi, " ")
-  .replace(/<[^>]*>/g, " ");
-
-const parseJson = text => {
-  const m = text.match(/\{[\s\S]*\}/);
-  if (!m) return null;
-  try { return JSON.parse(m[0]); } catch (_) { return null; }
-};
-
-const fetchWithTimeout = async (url, ms = 6000) => {
-  const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), ms);
+// Gửi message cho background có timeout — tránh treo popup nếu service worker không phản hồi
+const sendToBackground = (msg, ms = 8000) => new Promise((resolve) => {
+  const timer = setTimeout(() => resolve({ ok: false, err: "Hết thời gian chờ" }), ms);
   try {
-    return await fetch(url, { cache: "no-store", signal: ctrl.signal });
-  } finally {
+    chrome.runtime.sendMessage(msg, (r) => {
+      clearTimeout(timer);
+      if (chrome.runtime.lastError) resolve({ ok: false, err: chrome.runtime.lastError.message });
+      else resolve(r || { ok: false, err: "Không có phản hồi" });
+    });
+  } catch (e) {
     clearTimeout(timer);
+    resolve({ ok: false, err: e.message });
   }
-};
+});
 
-// Thử lần lượt từng nguồn; timeout 6s mỗi nguồn
-const loadSource = async () => {
-  let lastErr = null;
-  for (const src of CODE_SOURCES) {
-    try {
-      // raw: cache-bust bằng ?t=...
-      const bustUrl = src + (src.includes("?") ? "&" : "?") + "t=" + Date.now();
-      const res = await fetchWithTimeout(bustUrl);
-      if (!res.ok) throw new Error("HTTP " + res.status);
-      const text = cleanText(await res.text());
-      const data = parseJson(text);
-      if (data) return { text, data };
-      throw new Error("JSON không hợp lệ");
-    } catch (e) { lastErr = e; }
-  }
-  throw lastErr || new Error("Không tải được nguồn nào");
-};
-
+// Khối NGUỒN CODE MỚI NHẤT — fetch qua background.js (nơi quản lý nguồn chính + dự phòng jsDelivr)
 const relTime = (dateStr) => {
   const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec((dateStr || "").trim());
   if (!m) return "";
@@ -95,7 +65,9 @@ const renderInfo = async () => {
   relEl.textContent = "";
   noteEl.textContent = "…";
   try {
-    const { data } = await loadSource();
+    const res = await sendToBackground({ action: "fetchJson" });
+    if (!res || !res.ok || !res.data) throw new Error(res?.err || "Không tải được nguồn");
+    const data = res.data;
     const updated = (typeof data.updated === "string" ? data.updated.trim() : "");
     updatedEl.textContent = updated || "—";
     relEl.textContent = relTime(updated);
@@ -110,7 +82,6 @@ const renderInfo = async () => {
 };
 document.getElementById("ng-src-retry").onclick = renderInfo;
 
-// Nút tải lại (icon refresh) ngay tiêu đề khối nguồn
 const reloadBtn = document.getElementById("ng-src-reload");
 reloadBtn.addEventListener("click", () => {
   reloadBtn.classList.add("spinning");
@@ -119,30 +90,11 @@ reloadBtn.addEventListener("click", () => {
 
 renderInfo();
 
-// ===== Kiểm tra bản cập nhật =====
-const REMOTE_MANIFEST = "https://raw.githubusercontent.com/minhkhw/AutoRedeemDF/refs/heads/main/manifest.json";
-
-const cmpVersions = (a, b) => {
-  const pa = String(a || "").split(".").map(n => parseInt(n, 10) || 0);
-  const pb = String(b || "").split(".").map(n => parseInt(n, 10) || 0);
-  const len = Math.max(pa.length, pb.length);
-  for (let i = 0; i < len; i++) {
-    const d = (pa[i] || 0) - (pb[i] || 0);
-    if (d) return d > 0 ? 1 : -1;
-  }
-  return 0;
-};
-
+// Kiểm tra bản cập nhật — nhờ background check (đã cache kết quả trong storage)
 (async () => {
-  try {
-    const res = await fetchWithTimeout(REMOTE_MANIFEST + "?t=" + Date.now());
-    if (!res.ok) return;
-    const data = parseJson(await res.text());
-    const latest = (data && typeof data.version === "string" ? data.version.trim() : "");
-    const current = (typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.getManifest)
-      ? chrome.runtime.getManifest().version : "";
-    if (!latest || !current || cmpVersions(latest, current) <= 0) return;
-    document.getElementById("upd-ver").textContent = "v" + latest;
-    document.getElementById("update-banner").style.display = "flex";
-  } catch (_) { /* im lặng — không quấy rầy khi offline */ }
+  const res = await sendToBackground({ action: "checkUpdate" });
+  const info = res && res.ok ? res.info : null;
+  if (!info || !info.updateAvailable || !info.latest) return; // im lặng — không quấy rầy khi offline
+  document.getElementById("upd-ver").textContent = "v" + info.latest;
+  document.getElementById("update-banner").style.display = "flex";
 })();
