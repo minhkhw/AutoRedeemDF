@@ -13,6 +13,22 @@ const cmpVersions = (a, b) => {
   return 0;
 };
 
+const parseJsonSafely = (text) => {
+  const source = typeof text === "string" ? text.trim() : "";
+  if (!source) return null;
+  try {
+    return JSON.parse(source);
+  } catch (_) {
+    const match = source.match(/(\{[\s\S]*\}|\[[\s\S]*\])/);
+    if (!match) return null;
+    try {
+      return JSON.parse(match[1]);
+    } catch (_) {
+      return null;
+    }
+  }
+};
+
 const setUpdateBadge = (available) => {
   try {
     if (available) {
@@ -28,9 +44,10 @@ const checkUpdate = async () => {
   try {
     const r = await fetch(REMOTE_MANIFEST_URL + "?t=" + Date.now(), { cache: "no-store" });
     if (!r.ok) return null;
-    const m = (await r.text()).match(/\{[\s\S]*\}/);
-    if (!m) return null;
-    const latest = String((JSON.parse(m[0]).version || "")).trim();
+    const text = await r.text();
+    const data = parseJsonSafely(text);
+    if (!data || data.version == null) return null;
+    const latest = String(data.version).trim();
     const current = chrome.runtime.getManifest().version;
     if (!latest || !current) return null;
     const info = { latest, current, updateAvailable: cmpVersions(latest, current) > 0, checkedAt: Date.now() };
@@ -55,9 +72,8 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
           const r = await fetch(src, { cache: "no-store" });
           if (!r.ok) continue;
           const text = await r.text();
-          const m = text.match(/\{[\s\S]*\}/);
-          if (!m) continue;
-          const data = JSON.parse(m[0]);
+          const data = parseJsonSafely(text);
+          if (!data) continue;
           sendResponse({ ok: true, data, text });
           return;
         } catch (_) {  }
